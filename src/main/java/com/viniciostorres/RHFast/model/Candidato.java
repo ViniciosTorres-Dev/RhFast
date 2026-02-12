@@ -1,11 +1,13 @@
 package com.viniciostorres.RHFast.model;
 
+import com.viniciostorres.RHFast.model.enums.Situacao;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import lombok.*;
+import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
 
@@ -34,6 +36,15 @@ public class Candidato {
     @NotBlank
     private String estado;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Situacao situacao;
+
+    @CPF
+    @NotBlank
+    @Column(unique = true)
+    private String cpf;
+
     @NotBlank
     private String cidade;
 
@@ -54,6 +65,9 @@ public class Candidato {
     private void limparFormatacao() {
         if (this.numeroTelefone != null) {
             this.numeroTelefone = this.numeroTelefone.replaceAll("\\D", "");
+        }
+        if (this.cpf != null) {
+            this.cpf = this.cpf.replaceAll("\\D", "");
         }
     }
 }
