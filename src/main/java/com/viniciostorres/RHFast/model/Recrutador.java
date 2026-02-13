@@ -41,7 +41,7 @@ public class Recrutador {
     @NotBlank
     private String estado;
 
-    @CPF
+    @CPF(message = "CPF inválido")
     @NotBlank
     @Column(unique = true)
     private String cpf;

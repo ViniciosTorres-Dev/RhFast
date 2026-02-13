@@ -1,6 +1,7 @@
 package com.viniciostorres.RHFast.service;
 
 import com.viniciostorres.RHFast.model.Recrutador;
+import com.viniciostorres.RHFast.repository.CandidatoRepository;
 import com.viniciostorres.RHFast.repository.RecrutadorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.Optional;
 public class RecrutadorService {
 
     private final RecrutadorRepository recrutadorRepository;
+    private final CandidatoRepository candidatoRepository;
     private final EmailService emailService;
 
     public List<Recrutador> getAll() {
@@ -27,6 +29,14 @@ public class RecrutadorService {
 
         recrutador.setNumeroTelefone(telefoneLimpo);
         recrutador.setCpf(cpfLimpo);
+
+        if (candidatoRepository.existsByEmail(recrutador.getEmail())) {
+            throw new IllegalArgumentException("Esse E-mail já está cadastrado");
+        }
+
+        if (candidatoRepository.existsByNumeroTelefone(telefoneLimpo)) {
+            throw new IllegalArgumentException("Esse número de telefone já está cadastrado");
+        }
 
         Optional<Recrutador> recrutadorComEmail = recrutadorRepository.findByEmail(recrutador.getEmail());
         if (recrutadorComEmail.isPresent() && !recrutadorComEmail.get().getId().equals(recrutador.getId())) {

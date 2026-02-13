@@ -40,13 +40,16 @@ public class Candidato {
     @Enumerated(EnumType.STRING)
     private Situacao situacao;
 
-    @CPF
+    @CPF(message = "CPF inválido")
     @NotBlank
     @Column(unique = true)
     private String cpf;
 
     @NotBlank
     private String cidade;
+
+    @NotBlank
+    private String cep;
 
     @NotNull(message = "É necessária colocar sua data de nascimento")
     @Past(message = "Data de nascimento inválida")
@@ -63,11 +66,15 @@ public class Candidato {
     @PrePersist
     @PreUpdate
     private void limparFormatacao() {
+
         if (this.numeroTelefone != null) {
             this.numeroTelefone = this.numeroTelefone.replaceAll("\\D", "");
         }
         if (this.cpf != null) {
             this.cpf = this.cpf.replaceAll("\\D", "");
+        }
+        if (this.cep != null) {
+            this.cep = this.cep.replaceAll("\\D", "");
         }
     }
 }
