@@ -30,12 +30,6 @@ public class Candidato {
     @NotBlank
     private String sobrenome;
 
-    @NotBlank
-    private String pais;
-
-    @NotBlank
-    private String estado;
-
     @NotNull
     @Enumerated(EnumType.STRING)
     private Situacao situacao;
@@ -46,10 +40,16 @@ public class Candidato {
     private String cpf;
 
     @NotBlank
+    private String cep;
+
+    @NotBlank
+    private String estado;
+
+    @NotBlank
     private String cidade;
 
     @NotBlank
-    private String cep;
+    private String logradouro;
 
     @NotNull(message = "É necessária colocar sua data de nascimento")
     @Past(message = "Data de nascimento inválida")
@@ -63,6 +63,7 @@ public class Candidato {
     @NotBlank
     @Column(unique = true)
     private String numeroTelefone;
+
     @PrePersist
     @PreUpdate
     private void limparFormatacao() {

@@ -35,19 +35,22 @@ public class Recrutador {
     @NotBlank
     private String cargo;
 
-    @NotBlank
-    private String pais;
-
-    @NotBlank
-    private String estado;
-
     @CPF(message = "CPF inválido")
     @NotBlank
     @Column(unique = true)
     private String cpf;
 
     @NotBlank
+    private String cep;
+
+    @NotBlank
+    private String estado;
+
+    @NotBlank
     private String cidade;
+
+    @NotBlank
+    private String logradouro;
 
     @NotNull(message = "É necessária colocar sua data de nascimento")
     @Past(message = "Data de nascimento inválida")
@@ -69,6 +72,9 @@ public class Recrutador {
         }
         if (this.cpf != null) {
             this.cpf = this.cpf.replaceAll("\\D", "");
+        }
+        if (this.cep != null) {
+            this.cep = this.cep.replaceAll("\\D", "");
         }
     }
 }
