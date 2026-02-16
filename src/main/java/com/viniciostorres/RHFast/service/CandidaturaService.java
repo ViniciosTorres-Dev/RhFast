@@ -10,6 +10,9 @@ import com.viniciostorres.RHFast.repository.VagaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class CandidaturaService {
@@ -17,6 +20,12 @@ public class CandidaturaService {
     private final CandidaturaRepository candidaturaRepository;
     private final VagaRepository vagaRepository;
     private final CandidatoRepository candidatoRepository;
+
+    public List<Candidatura> getAll() { return candidaturaRepository.findAll();}
+
+    public Candidatura candidatura(Candidatura candidatura) {
+        return candidaturaRepository.save(candidatura);
+    }
 
     public Candidatura inscrever(Long idCandidato, Long idVaga) {
         Candidato candidato = candidatoRepository.findById(idCandidato)
@@ -38,5 +47,15 @@ public class CandidaturaService {
         candidatura.setVaga(vaga);
 
         return candidaturaRepository.save(candidatura);
+
+    }
+
+    public Candidatura save(Candidatura candidatura) {
+        return candidaturaRepository.save(candidatura);
+    }
+
+    public void delete(Long id) { candidaturaRepository.deleteById(id);}
+    public Optional<Candidatura> findById(Long id) {
+        return candidaturaRepository.findById(id);
     }
 }

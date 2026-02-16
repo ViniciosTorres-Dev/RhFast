@@ -1,6 +1,7 @@
 package com.viniciostorres.RHFast.controller;
 
 import com.viniciostorres.RHFast.model.Candidato;
+import com.viniciostorres.RHFast.model.Candidatura;
 import com.viniciostorres.RHFast.service.CandidatoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,13 @@ public class CandidatoController {
 
     @GetMapping
     public List<Candidato> getAll() {return candidatoService.getAll();}
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Candidato> getById(@PathVariable Long id) {
+        return candidatoService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 
     @PostMapping
     public Candidato create(@Valid @RequestBody Candidato candidato) { return candidatoService.save(candidato);}
