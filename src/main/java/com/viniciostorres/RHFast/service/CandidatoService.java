@@ -66,6 +66,17 @@ public class CandidatoService {
         return candidatoRepository.findById(id);
     }
 
+    public Candidato autenticar(String email, String senhaDigitada) {
+        Candidato candidato = candidatoRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("E-mail ou senha inválidos"));
+
+        if (!bCryptPasswordEncoder.matches(senhaDigitada, candidato.getSenha())) {
+            throw new IllegalArgumentException("E-mail ou senha inválidos");
+        }
+
+        return candidato;
+    }
+
     private String limparTexto(String texto) {
         if (texto == null) return null;
         return texto.replaceAll("\\D", "");

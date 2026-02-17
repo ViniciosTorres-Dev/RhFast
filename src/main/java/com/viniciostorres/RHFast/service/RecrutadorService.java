@@ -1,5 +1,6 @@
 package com.viniciostorres.RHFast.service;
 
+import com.viniciostorres.RHFast.model.Candidato;
 import com.viniciostorres.RHFast.model.Recrutador;
 import com.viniciostorres.RHFast.repository.CandidatoRepository;
 import com.viniciostorres.RHFast.repository.RecrutadorRepository;
@@ -68,6 +69,17 @@ public class RecrutadorService {
 
     public Optional<Recrutador> findById(Long id) {
         return recrutadorRepository.findById(id);
+    }
+
+    public Recrutador autenticar(String email, String senhaDigitada) {
+        Recrutador recrutador = recrutadorRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("E-mail ou senha inválidos"));
+
+        if (!bCryptPasswordEncoder.matches(senhaDigitada, recrutador.getSenha())) {
+            throw new IllegalArgumentException("E-mail ou senha inválidos");
+        }
+
+        return recrutador;
     }
 
     private String limparTexto(String texto) {

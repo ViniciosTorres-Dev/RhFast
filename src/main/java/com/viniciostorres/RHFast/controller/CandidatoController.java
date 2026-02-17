@@ -31,6 +31,13 @@ public class CandidatoController {
     @PostMapping
     public Candidato create(@Valid @RequestBody Candidato candidato) { return candidatoService.save(candidato);}
 
+    @PostMapping("/login")
+    public ResponseEntity<Candidato> login(@RequestBody Candidato loginData) {
+        Candidato autenticado = candidatoService.autenticar(loginData.getEmail(), loginData.getSenha());
+
+        return ResponseEntity.ok(autenticado);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Candidato> update(@PathVariable Long id, @Valid @RequestBody Candidato candidato) {
         return candidatoService.findById(id)
