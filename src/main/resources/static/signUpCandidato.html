@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>RH Fast</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+  <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+  <link rel="stylesheet" type="text/css" href="css/util.css">
+  <link rel="stylesheet" type="text/css" href="css/signUpCandidato.css">
+</head>
+<body>
+
+  <div class="limiter">
+    <div class="container-login100" style="background-image: url('images/bg-01.jpg');">
+      <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+        <form class="login100-form validate-form">
+          <span class="login100-form-title p-b-49">
+            Cadastro
+          </span>
+
+          <div class="row m-b-20">
+            <div class="col-md-6">
+              <div class="wrap-input100 validate-input m-b-23" data-validate="Digite seu nome">
+                <span class="label-input100">Nome</span>
+                <input class="input100" type="text" name="nome" placeholder="Digite seu nome">
+                <span class="focus-input100" data-symbol="&#xf206;"></span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="wrap-input100 validate-input m-b-23" data-validate="Digite seu ultimo nome">
+                <span class="label-input100">Sobrenome</span>
+                <input class="input100" type="text" name="sobrenome" placeholder="Digite seu último nome">
+                <span class="focus-input100" data-symbol="&#xf206;"></span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="wrap-input100 validate-input m-b-23" data-validate="Insira seu cpf">
+                <span class="label-input100">CPF</span>
+                <input class="input100" type="text" name="cpf" placeholder="Insira seu cpf">
+                <span class="focus-input100" data-symbol="&#xf206;"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row m-b-20">
+            <div class="col-md-6">
+              <div class="wrap-input100 validate-input m-b-23" data-validate="Insira o e-mail">
+                <span class="label-input100">E-mail</span>
+                <input class="input100" type="email" name="email" placeholder="Insira seu e-mail">
+                <span class="focus-input100" data-symbol="&#xf206;"></span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="wrap-input100 validate-input m-b-23" data-validate="(00) 00000-0000">
+                <span class="label-input100">Número de telefone</span>
+                <input class="input100" type="text" name="numeroTelefone" placeholder="(00) 00000-0000">
+                <span class="focus-input100" data-symbol="&#xf206;"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row m-b-20">
+            <div class="col-md-6">
+              <div class="wrap-input100 validate-input m-b-23" data-validate="Digite o seu cep">
+                <span class="label-input100">CEP</span>
+                <input class="input100" type="text" name="cep" placeholder="Digite o seu cep">
+                <span class="focus-input100" data-symbol="&#xf206;"></span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="wrap-input100 validate-input m-b-23">
+                <span class="label-input100">Estado</span>
+                <input class="input100" type="text" name="estado" placeholder="Estado" readonly>
+                <span class="focus-input100" data-symbol="&#xf206;"></span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="wrap-input100 validate-input m-b-23" data-validate="Insira sua cidade">
+                <span class="label-input100">Cidade</span>
+                <input class="input100" type="text" name="cidade" placeholder="Insira sua cidade" readonly>
+                <span class="focus-input100" data-symbol="&#xf206;"></span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="wrap-input100 validate-input m-b-23" data-validate="Digite o logradouro">
+                <span class="label-input100">Rua</span>
+                <input class="input100" type="text" name="logradouro" placeholder="Digite o logradouro">
+                <span class="focus-input100" data-symbol="&#xf206;"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row m-b-20">
+            <div class="col-md-6">
+              <div class="wrap-input100 validate-input m-b-23" data-validate="Data obrigatória">
+                <span class="label-input100">Data de Nascimento</span>
+                <input class="input100" type="date" name="dataNascimento">
+                <span class="focus-input100" data-symbol="&#xf206;"></span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="wrap-input100 validate-input m-b-23">
+                <span class="label-input100">Situação</span>
+                <select class="input100" name="situacao" style="border:none; height: 55px;">
+                  <option value="" disabled selected>Selecione...</option>
+                  <option value="DESEMPREGADO">Desempregado</option>
+                  <option value="ESTUDANTE">Estudante</option>
+                  <option value="AUTONOMO">Autônomo</option>
+                  <option value="EMPREGADO">Empregado</option>
+                </select>
+                <span class="focus-input100" data-symbol="&#xf206;"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row m-b-20">
+            <div class="col-md-6">
+              <div class="wrap-input100 validate-input" data-validate="Password is required">
+                <span class="label-input100">Senha</span>
+                <input class="input100" type="password" name="senha" placeholder="Digite sua senha">
+                <span class="focus-input100" data-symbol="&#xf190;"></span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="wrap-input100 validate-input" data-validate="Password is required">
+                <span class="label-input100">Confirme a Senha</span>
+                <input class="input100" type="password" name="confirmSenha" placeholder="Confirme sua senha">
+                <span class="focus-input100" data-symbol="&#xf190;"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="container-login100-form-btn">
+            <div class="wrap-login100-form-btn">
+              <div class="login100-form-bgbtn"></div>
+              <button class="login100-form-btn">
+                Cadastrar
+              </button>
+            </div>
+          </div>
+          <div class="flex-col-c p-t-25">
+            <a href="signInCandidato.html" class="txt2">
+              Já tenho conta
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js"></script>
+  <script src="vendor/bootstrap/js/popper.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+  <script src="js/signUpCandidato.js"></script>
+</body>
+</html>
