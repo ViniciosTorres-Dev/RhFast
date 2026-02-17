@@ -3,6 +3,7 @@ package com.viniciostorres.RHFast.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.hibernate.validator.constraints.br.CNPJ;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
@@ -26,16 +27,29 @@ public class Recrutador {
     @NotBlank
     private String sobrenome;
 
-    @NotBlank
-    private String empresa;
-
-    @NotBlank
-    private String cargo;
-
     @CPF(message = "CPF inválido")
     @NotBlank
     @Column(unique = true)
     private String cpf;
+
+    @NotBlank
+    private String cargo;
+
+    @Email(message = "Digite um E-mail válido")
+    @NotBlank
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    @NotBlank
+    @Column(unique = true)
+    private String numeroTelefone;
+
+    @NotBlank
+    @CNPJ(message = "CNPJ inválido")
+    private String cnpj;
+
+    @NotBlank
+    private String empresa;
 
     @NotBlank
     private String cep;
@@ -48,19 +62,6 @@ public class Recrutador {
 
     @NotBlank
     private String logradouro;
-
-    @NotNull(message = "É necessária colocar sua data de nascimento")
-    @Past(message = "Data de nascimento inválida")
-    private LocalDate dataNascimento;
-
-    @Email(message = "Digite um E-mail válido")
-    @NotBlank
-    @Column(unique = true, nullable = false)
-    private String email;
-
-    @NotBlank
-    @Column(unique = true)
-    private String numeroTelefone;
 
     @NotBlank
     @Size(min = 8, message = "A senha deve ter no mínimo 8 caracteres")
@@ -77,6 +78,9 @@ public class Recrutador {
         }
         if (this.cep != null) {
             this.cep = this.cep.replaceAll("\\D", "");
+        }
+        if (this.cnpj != null) {
+            this.cnpj = this.cnpj.replaceAll("\\D", "");
         }
     }
 }
