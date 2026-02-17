@@ -1,10 +1,7 @@
 package com.viniciostorres.RHFast.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -64,6 +61,11 @@ public class Recrutador {
     @NotBlank
     @Column(unique = true)
     private String numeroTelefone;
+
+    @NotBlank
+    @Size(min = 8, message = "A senha deve ter no mínimo 8 caracteres")
+    private String senha;
+
     @PrePersist
     @PreUpdate
     private void limparFormatacao() {

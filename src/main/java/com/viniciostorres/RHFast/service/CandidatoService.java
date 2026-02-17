@@ -4,6 +4,7 @@ import com.viniciostorres.RHFast.model.Candidato;
 import com.viniciostorres.RHFast.repository.CandidatoRepository;
 import com.viniciostorres.RHFast.repository.RecrutadorRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,10 +17,14 @@ public class CandidatoService {
     private final CandidatoRepository candidatoRepository;
     private final RecrutadorRepository recrutadorRepository;
     private final EmailService emailService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public List<Candidato> getAll() { return candidatoRepository.findAll();}
 
     public Candidato save(Candidato candidato) {
+        String senhaCriptografada = bCryptPasswordEncoder.encode(candidato.getSenha());
+        candidato.setSenha(senhaCriptografada);
+
         boolean isNovoCadastro = (candidato.getId() == null);
 
         String telefoneLimpo = limparTexto(candidato.getNumeroTelefone());
