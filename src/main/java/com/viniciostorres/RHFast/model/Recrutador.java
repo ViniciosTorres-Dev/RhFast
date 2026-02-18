@@ -44,24 +44,9 @@ public class Recrutador {
     @Column(unique = true)
     private String numeroTelefone;
 
-    @NotBlank
-    @CNPJ(message = "CNPJ inválido")
-    private String cnpj;
-
-    @NotBlank
-    private String empresa;
-
-    @NotBlank
-    private String cep;
-
-    @NotBlank
-    private String estado;
-
-    @NotBlank
-    private String cidade;
-
-    @NotBlank
-    private String logradouro;
+    @ManyToOne
+    @JoinColumn(name = "empresa_id")
+    private Empresa empresa;
 
     @NotBlank
     @Size(min = 8, message = "A senha deve ter no mínimo 8 caracteres")
@@ -75,12 +60,6 @@ public class Recrutador {
         }
         if (this.cpf != null) {
             this.cpf = this.cpf.replaceAll("\\D", "");
-        }
-        if (this.cep != null) {
-            this.cep = this.cep.replaceAll("\\D", "");
-        }
-        if (this.cnpj != null) {
-            this.cnpj = this.cnpj.replaceAll("\\D", "");
         }
     }
 }

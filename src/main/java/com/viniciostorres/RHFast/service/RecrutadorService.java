@@ -1,8 +1,9 @@
 package com.viniciostorres.RHFast.service;
 
-import com.viniciostorres.RHFast.model.Candidato;
+import com.viniciostorres.RHFast.model.Empresa;
 import com.viniciostorres.RHFast.model.Recrutador;
 import com.viniciostorres.RHFast.repository.CandidatoRepository;
+import com.viniciostorres.RHFast.repository.EmpresaRepository;
 import com.viniciostorres.RHFast.repository.RecrutadorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,6 +18,7 @@ public class RecrutadorService {
 
     private final RecrutadorRepository recrutadorRepository;
     private final CandidatoRepository candidatoRepository;
+    private final EmpresaRepository empresaRepository;
     private final EmailService emailService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -25,33 +27,71 @@ public class RecrutadorService {
     }
 
     public Recrutador save(Recrutador recrutador) {
-        String senhaCriptografada = bCryptPasswordEncoder.encode(recrutador.getSenha());
-        recrutador.setSenha(senhaCriptografada);
-
         boolean isNovoCadastro = (recrutador.getId() == null);
 
         String telefoneLimpo = limparTexto(recrutador.getNumeroTelefone());
         String cpfLimpo = limparTexto(recrutador.getCpf());
-
         recrutador.setNumeroTelefone(telefoneLimpo);
         recrutador.setCpf(cpfLimpo);
 
-        if (candidatoRepository.existsByEmail(recrutador.getEmail())) {
-            throw new IllegalArgumentException("Esse E-mail já está cadastrado");
+        // Lógica para vincular ou criar Empresa
+        if (recrutador.getEmpresa() != null) {
+            Empresa empresaRecebida = recrutador.getEmpresa();
+            
+            if (empresaRecebida.getId() != null) {
+                // Se veio com ID, busca no banco para garantir que existe
+                Empresa empresaExistente = empresaRepository.findById(empresaRecebida.getId())
+                        .orElseThrow(() -> new IllegalArgumentException("Empresa não encontrada com o ID informado."));
+                recrutador.setEmpresa(empresaExistente);
+            } else if (empresaRecebida.getCnpj() != null) {
+                // Se não tem ID, mas tem CNPJ, tenta buscar pelo CNPJ
+                String cnpjLimpo = limparTexto(empresaRecebida.getCnpj());
+                empresaRecebida.setCnpj(cnpjLimpo);
+                
+                Optional<Empresa> empresaExistente = empresaRepository.findByCnpj(cnpjLimpo);
+                
+                if (empresaExistente.isPresent()) {
+                    // Já existe empresa com esse CNPJ, usa ela
+                    recrutador.setEmpresa(empresaExistente.get());
+                } else {
+                    // Não existe, cria uma nova empresa com os dados fornecidos
+                    // Limpa formatação de campos da empresa também, se necessário
+                    if(empresaRecebida.getCep() != null) empresaRecebida.setCep(limparTexto(empresaRecebida.getCep()));
+                    
+                    Empresa novaEmpresa = empresaRepository.save(empresaRecebida);
+                    recrutador.setEmpresa(novaEmpresa);
+                }
+            } else {
+                // Se não tem ID nem CNPJ, não dá pra vincular
+                throw new IllegalArgumentException("Dados da empresa inválidos (CNPJ ou ID obrigatórios).");
+            }
+        } else {
+             // Se o objeto empresa for nulo
+             throw new IllegalArgumentException("É obrigatório informar os dados da empresa.");
         }
 
-        if (candidatoRepository.existsByNumeroTelefone(telefoneLimpo)) {
-            throw new IllegalArgumentException("Esse número de telefone já está cadastrado");
-        }
+        if (isNovoCadastro) {
+            if (recrutadorRepository.existsByEmail(recrutador.getEmail())) {
+                throw new IllegalArgumentException("Esse E-mail já está cadastrado");
+            }
+            if (recrutadorRepository.existsByNumeroTelefone(telefoneLimpo)) {
+                throw new IllegalArgumentException("Esse número de telefone já está cadastrado");
+            }
+            String senhaCriptografada = bCryptPasswordEncoder.encode(recrutador.getSenha());
+            recrutador.setSenha(senhaCriptografada);
+        } else {
+            Optional<Recrutador> recrutadorComEmail = recrutadorRepository.findByEmail(recrutador.getEmail());
+            if (recrutadorComEmail.isPresent() && !recrutadorComEmail.get().getId().equals(recrutador.getId())) {
+                throw new IllegalArgumentException("Esse E-mail já está em uso por outro recrutador");
+            }
 
-        Optional<Recrutador> recrutadorComEmail = recrutadorRepository.findByEmail(recrutador.getEmail());
-        if (recrutadorComEmail.isPresent() && !recrutadorComEmail.get().getId().equals(recrutador.getId())) {
-            throw new IllegalArgumentException("Esse E-mail já está em uso por outro recrutador");
-        }
-
-        Optional<Recrutador> recrutadorComTelefone = recrutadorRepository.findByNumeroTelefone(telefoneLimpo);
-        if (recrutadorComTelefone.isPresent() && !recrutadorComTelefone.get().getId().equals(recrutador.getId())) {
-            throw new IllegalArgumentException("Esse telefone já está em uso por outro recrutador");
+            Optional<Recrutador> recrutadorComTelefone = recrutadorRepository.findByNumeroTelefone(telefoneLimpo);
+            if (recrutadorComTelefone.isPresent() && !recrutadorComTelefone.get().getId().equals(recrutador.getId())) {
+                throw new IllegalArgumentException("Esse telefone já está em uso por outro recrutador");
+            }
+            
+             String senhaCriptografada = bCryptPasswordEncoder.encode(recrutador.getSenha());
+             recrutador.setSenha(senhaCriptografada);
         }
 
         Recrutador salvo = recrutadorRepository.save(recrutador);
@@ -69,6 +109,10 @@ public class RecrutadorService {
 
     public Optional<Recrutador> findById(Long id) {
         return recrutadorRepository.findById(id);
+    }
+
+    public List<Recrutador> findByEmpresaId(Long empresaId) {
+        return recrutadorRepository.findByEmpresaId(empresaId);
     }
 
     public Recrutador autenticar(String email, String senhaDigitada) {

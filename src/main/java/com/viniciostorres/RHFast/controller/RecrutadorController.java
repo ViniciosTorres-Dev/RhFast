@@ -28,6 +28,11 @@ public class RecrutadorController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/empresa/{empresaId}")
+    public List<Recrutador> getByEmpresaId(@PathVariable Long empresaId) {
+        return recrutadorService.findByEmpresaId(empresaId);
+    }
+
     @PostMapping
     public Recrutador create(@Valid @RequestBody Recrutador recrutador) { return recrutadorService.save(recrutador);}
 

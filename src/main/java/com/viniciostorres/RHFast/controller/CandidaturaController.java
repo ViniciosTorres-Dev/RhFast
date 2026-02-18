@@ -30,6 +30,16 @@ public class CandidaturaController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/candidato/{candidatoId}/vagas")
+    public List<Long> getVagasInscritas(@PathVariable Long candidatoId) {
+        return candidaturaService.getVagasInscritasPorCandidato(candidatoId);
+    }
+
+    @GetMapping("/vaga/{vagaId}")
+    public List<Candidatura> getCandidaturasPorVaga(@PathVariable Long vagaId) {
+        return candidaturaService.getCandidaturasPorVaga(vagaId);
+    }
+
     @PostMapping
     public ResponseEntity<Candidatura> inscrever(@RequestBody @Valid InscricaoDTO dto) {
         Candidatura novaCandidatura = candidaturaService.inscrever(dto.getIdCandidato(), dto.getIdVaga());

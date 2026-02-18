@@ -6,7 +6,6 @@ import com.viniciostorres.RHFast.model.enums.StatusVaga;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
 
@@ -45,8 +44,11 @@ public class Vaga {
     @NotNull
     @Enumerated(EnumType.STRING)
     private NivelExperiencia nivelExperiencia;
-    @NotBlank
-    private String empresa;
+    
+    @ManyToOne
+    @JoinColumn(name = "empresa_id")
+    private Empresa empresa;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private Modalidade modalidade;
@@ -54,6 +56,10 @@ public class Vaga {
     private Double salario;
     @NotBlank
     private String descricaoVaga;
+
+    @ManyToOne
+    @JoinColumn(name = "recrutador_id")
+    private Recrutador recrutador;
 
     @PrePersist
     private void preCreate() {
@@ -79,4 +85,3 @@ public class Vaga {
         }
     }
 }
-

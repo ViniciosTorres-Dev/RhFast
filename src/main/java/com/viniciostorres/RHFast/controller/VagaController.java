@@ -1,6 +1,8 @@
 package com.viniciostorres.RHFast.controller;
 
 import com.viniciostorres.RHFast.model.Vaga;
+import com.viniciostorres.RHFast.model.enums.Modalidade;
+import com.viniciostorres.RHFast.model.enums.NivelExperiencia;
 import com.viniciostorres.RHFast.service.VagaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +20,19 @@ public class VagaController {
     private final VagaService vagaService;
 
     @GetMapping
-    public List<Vaga> getAll() {return vagaService.getAll();}
+    public List<Vaga> getAll() {
+        return vagaService.findAll();
+    }
+
+    @GetMapping("/buscar")
+    public List<Vaga> buscarVagas(
+            @RequestParam(required = false) String termo,
+            @RequestParam(required = false) String localizacao,
+            @RequestParam(required = false) NivelExperiencia nivel,
+            @RequestParam(required = false) Modalidade modalidade
+    ) {
+        return vagaService.buscarVagas(termo, localizacao, nivel, modalidade);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Vaga> getById(@PathVariable Long id) {
@@ -27,8 +41,20 @@ public class VagaController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/recrutador/{recrutadorId}")
+    public List<Vaga> getByRecrutadorId(@PathVariable Long recrutadorId) {
+        return vagaService.findByRecrutadorId(recrutadorId);
+    }
+
+    @GetMapping("/empresa/{empresaId}")
+    public List<Vaga> getByEmpresaId(@PathVariable Long empresaId) {
+        return vagaService.findByEmpresaId(empresaId);
+    }
+
     @PostMapping
-    public Vaga create(@Valid @RequestBody Vaga vaga) { return vagaService.save(vaga);}
+    public Vaga create(@Valid @RequestBody Vaga vaga) {
+        return vagaService.save(vaga);
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<Vaga> update(@PathVariable Long id, @Valid @RequestBody Vaga vaga) {
