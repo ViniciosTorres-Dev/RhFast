@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>RH Fast - Vagas Disponíveis</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" type="text/css" href="css/util.css">
+    <link rel="stylesheet" type="text/css" href="css/mainCandidato.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">RH Fast</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Vagas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Minhas Candidaturas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Perfil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Sair</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <h2 class="mb-4">Vagas Disponíveis</h2>
+
+        <!-- Filtros -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form id="filtroForm">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="termo">Buscar por Título ou Descrição</label>
+                                <input type="text" class="form-control" id="termo" placeholder="Ex: Java, Vendas...">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="localizacao">Localização</label>
+                                <input type="text" class="form-control" id="localizacao" placeholder="Cidade ou Estado">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="nivel">Nível de Experiência</label>
+                                <select class="form-control" id="nivel">
+                                    <option value="">Todos</option>
+                                    <option value="ESTAGIO">Estágio</option>
+                                    <option value="JOVEM_APRENDIZ">Jovem Aprendiz</option>
+                                    <option value="JUNIOR">Junior</option>
+                                    <option value="PLENO">Pleno</option>
+                                    <option value="SENIOR">Senior</option>
+                                    <option value="ESPECIALISTA">Especialista</option>
+                                    <option value="DIRETOR">Diretor</option>
+                                    <option value="TEMPORARIO">Temporario</option>
+                                    <option value="OPERACIONAL">Operacional</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="modalidade">Modalidade</label>
+                                <select class="form-control" id="modalidade">
+                                    <option value="">Todas</option>
+                                    <option value="PRESENCIAL">Presencial</option>
+                                    <option value="HIBRIDO">Híbrido</option>
+                                    <option value="REMOTO">Remoto</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                    <button type="button" class="btn btn-secondary" onclick="limparFiltros()">Limpar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Lista de Vagas -->
+        <div class="row" id="listaVagas">
+            <!-- Conteúdo carregado via JS -->
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script src="vendor/bootstrap/js/popper.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/mainCandidato.js"></script>
+
+</body>
+</html>

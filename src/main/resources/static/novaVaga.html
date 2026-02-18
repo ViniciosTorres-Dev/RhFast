@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>RH Fast - Criar Nova Vaga</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" type="text/css" href="css/util.css">
+    <link rel="stylesheet" type="text/css" href="css/mainRecrutador.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="mainRecrutador.html">RH Fast</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="mainRecrutador.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Configurações</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Minha Conta</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Sair</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Criar Nova Vaga</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="novaVagaForm">
+                            <!-- Informações Básicas -->
+                            <h5 class="mb-3">Informações Básicas</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="nomeVaga">Nome da Vaga</label>
+                                        <input type="text" class="form-control" id="nomeVaga" name="nomeVaga" required placeholder="Ex: Desenvolvedor Java Junior">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="setorVaga">Setor</label>
+                                        <input type="text" class="form-control" id="setorVaga" name="setorVaga" required placeholder="Ex: Tecnologia, RH, Financeiro">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="salario">Salário (R$)</label>
+                                        <input type="number" step="0.01" class="form-control" id="salario" name="salario" required placeholder="0.00">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="nivelExperiencia">Nível de Experiência</label>
+                                        <select class="form-control" id="nivelExperiencia" name="nivelExperiencia" required>
+                                            <option value="">Selecione...</option>
+                                            <option value="ESTAGIO">Estágio</option>
+                                            <option value="JOVEM_APRENDIZ">Jovem Aprendiz</option>
+                                            <option value="JUNIOR">Junior</option>
+                                            <option value="PLENO">Pleno</option>
+                                            <option value="SENIOR">Senior</option>
+                                            <option value="ESPECIALISTA">Especialista</option>
+                                            <option value="DIRETOR">Diretor</option>
+                                            <option value="TEMPORARIO">Temporario</option>
+                                            <option value="OPERACIONAL">Operacional</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="modalidade">Modalidade</label>
+                                        <select class="form-control" id="modalidade" name="modalidade" required>
+                                            <option value="">Selecione...</option>
+                                            <option value="PRESENCIAL">Presencial</option>
+                                            <option value="HIBRIDO">Híbrido</option>
+                                            <option value="REMOTO">Remoto</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="descricaoVaga">Descrição da Vaga</label>
+                                <textarea class="form-control" id="descricaoVaga" name="descricaoVaga" rows="5" required placeholder="Descreva as responsabilidades, requisitos e benefícios..."></textarea>
+                            </div>
+
+                            <hr>
+
+                            <!-- Localização -->
+                            <h5 class="mb-3">Localização</h5>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="cep">CEP</label>
+                                        <input type="text" class="form-control" id="cep" name="cep" required placeholder="00000-000">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="cidade">Cidade</label>
+                                        <input type="text" class="form-control" id="cidade" name="cidade" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="estado">Estado</label>
+                                        <input type="text" class="form-control" id="estado" name="estado" required placeholder="UF">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="pais">País</label>
+                                        <input type="text" class="form-control" id="pais" name="pais" required value="Brasil">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between mt-4">
+                                <a href="mainRecrutador.html" class="btn btn-secondary">Cancelar</a>
+                                <button type="submit" class="btn btn-primary">Publicar Vaga</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script src="vendor/bootstrap/js/popper.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/novaVaga.js"></script>
+
+</body>
+</html>

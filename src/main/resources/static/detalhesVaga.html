@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>RH Fast - Detalhes da Vaga</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" type="text/css" href="css/util.css">
+    <link rel="stylesheet" type="text/css" href="css/mainCandidato.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="mainCandidato.html">RH Fast</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="mainCandidato.html">Vagas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Minhas Candidaturas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Perfil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Sair</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 id="tituloVaga">Carregando...</h3>
+                        <p class="mb-0" id="empresaVaga"></p>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <p><strong>Localização:</strong> <span id="localVaga"></span></p>
+                                <p><strong>Modalidade:</strong> <span id="modalidadeVaga"></span></p>
+                                <p><strong>Nível:</strong> <span id="nivelVaga"></span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Salário:</strong> R$ <span id="salarioVaga"></span></p>
+                                <p><strong>Setor:</strong> <span id="setorVaga"></span></p>
+                                <p><strong>Publicada em:</strong> <span id="dataVaga"></span></p>
+                            </div>
+                        </div>
+
+                        <h5 class="mb-3">Descrição da Vaga</h5>
+                        <p id="descricaoVaga" class="text-justify mb-5"></p>
+
+                        <div class="text-center">
+                            <button class="btn btn-success btn-lg" onclick="candidatarSe()">Candidatar-se Agora</button>
+                            <a href="mainCandidato.html" class="btn btn-secondary btn-lg ml-2">Voltar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script src="vendor/bootstrap/js/popper.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/detalhesVaga.js"></script>
+
+</body>
+</html>
