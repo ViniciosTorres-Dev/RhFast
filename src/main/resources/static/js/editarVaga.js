@@ -1,19 +1,5 @@
-const nomeVagaInput = document.querySelector('#nomeVaga');
-const setorVagaInput = document.querySelector('#setorVaga');
-const paisInput = document.querySelector('#pais');
-const estadoInput = document.querySelector('#estado');
-const cidadeInput = document.querySelector('#cidade');
-const cepInput = document.querySelector('#cep');
-const nivelExperienciaInput = document.querySelector('#nivelExperiencia');
-const modalidadeInput = document.querySelector('#modalidade');
-const salarioInput = document.querySelector('#salario');
-const descricaoVagaInput = document.querySelector('#descricaoVaga');
-const statusInput = document.querySelector('#status');
-const vagaIdInput = document.querySelector('#vagaId');
-
-$(document).ready(function(){
+document.addEventListener('DOMContentLoaded', function() {
     checkLogin();
-    $('#cep').mask('00000-000');
 
     const urlParams = new URLSearchParams(window.location.search);
     const vagaId = urlParams.get('id');
@@ -23,6 +9,30 @@ $(document).ready(function(){
     } else {
         alert("Vaga não especificada.");
         window.location.href = "mainRecrutador.html";
+    }
+
+    const form = document.getElementById('editarVagaForm');
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            atualizarVaga();
+        });
+    }
+
+    // Máscara de CEP
+    const cepInput = document.getElementById('cep');
+    if (cepInput) {
+        cepInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 5) {
+                value = value.substring(0, 5) + '-' + value.substring(5, 8);
+            }
+            e.target.value = value;
+        });
+
+        cepInput.addEventListener('blur', function() {
+            buscarCep(this.value);
+        });
     }
 });
 
@@ -41,18 +51,18 @@ function carregarVaga(id) {
             return response.json();
         })
         .then(vaga => {
-            vagaIdInput.value = vaga.id;
-            nomeVagaInput.value = vaga.nomeVaga;
-            setorVagaInput.value = vaga.setorVaga;
-            paisInput.value = vaga.pais;
-            estadoInput.value = vaga.estado;
-            cidadeInput.value = vaga.cidade;
-            cepInput.value = vaga.cep;
-            nivelExperienciaInput.value = vaga.nivelExperiencia;
-            modalidadeInput.value = vaga.modalidade;
-            salarioInput.value = vaga.salario;
-            descricaoVagaInput.value = vaga.descricaoVaga;
-            statusInput.value = vaga.status;
+            document.getElementById('vagaId').value = vaga.id;
+            document.getElementById('nomeVaga').value = vaga.nomeVaga;
+            document.getElementById('setorVaga').value = vaga.setorVaga;
+            document.getElementById('pais').value = vaga.pais;
+            document.getElementById('estado').value = vaga.estado;
+            document.getElementById('cidade').value = vaga.cidade;
+            document.getElementById('cep').value = vaga.cep;
+            document.getElementById('nivelExperiencia').value = vaga.nivelExperiencia;
+            document.getElementById('modalidade').value = vaga.modalidade;
+            document.getElementById('salario').value = vaga.salario;
+            document.getElementById('descricaoVaga').value = vaga.descricaoVaga;
+            document.getElementById('status').value = vaga.status;
         })
         .catch(error => {
             console.error('Erro:', error);
@@ -61,78 +71,64 @@ function carregarVaga(id) {
         });
 }
 
-cepInput.addEventListener('blur', () => {
-  let cep = cepInput.value.replace(/\D/g, '');
-
-  if (cep.length === 8) {
-    fetch(`https://viacep.com.br/ws/${cep}/json/`)
-      .then(response => response.json())
-      .then(data => {
-        if (!data.erro) {
-            cidadeInput.value = data.localidade;
-            estadoInput.value = data.uf;
-        } else {
-          alert("CEP não encontrado.");
-        }
-      })
-      .catch(err => console.error("Erro ao buscar CEP", err));
-  }
-});
-
-const formulario = document.querySelector('#editarVagaForm');
-formulario.addEventListener('submit', (event) => {
-  event.preventDefault();
-  atualizarVaga();
-});
+function buscarCep(cep) {
+    cep = cep.replace(/\D/g, '');
+    if (cep.length === 8) {
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(response => response.json())
+            .then(data => {
+                if (!data.erro) {
+                    document.getElementById('cidade').value = data.localidade;
+                    document.getElementById('estado').value = data.uf;
+                } else {
+                    alert("CEP não encontrado.");
+                }
+            })
+            .catch(err => console.error("Erro ao buscar CEP", err));
+    }
+}
 
 function atualizarVaga() {
-  const inputs = [nomeVagaInput, setorVagaInput, paisInput, estadoInput, cidadeInput, cepInput, nivelExperienciaInput, modalidadeInput, salarioInput, descricaoVagaInput, statusInput];
+    const vagaId = document.getElementById('vagaId').value;
+    const recrutadorId = localStorage.getItem('recrutadorId');
 
-  for(let input of inputs) {
-      if(!input.value.trim()) {
-          alert(`O campo ${input.previousElementSibling.innerText} é obrigatório.`);
-          return;
-      }
-  }
+    if (!recrutadorId) {
+        alert("Erro: Recrutador não identificado. Faça login novamente.");
+        window.location.href = "signInRecrutador.html";
+        return;
+    }
 
-  const recrutadorId = localStorage.getItem('recrutadorId');
-  if (!recrutadorId) {
-      alert("Erro: Recrutador não identificado. Faça login novamente.");
-      window.location.href = "signInRecrutador.html";
-      return;
-  }
+    const dadosVaga = {
+        id: vagaId,
+        nomeVaga: document.getElementById('nomeVaga').value,
+        setorVaga: document.getElementById('setorVaga').value,
+        pais: document.getElementById('pais').value,
+        estado: document.getElementById('estado').value,
+        cidade: document.getElementById('cidade').value,
+        cep: document.getElementById('cep').value.replace(/\D/g, ''),
+        status: document.getElementById('status').value,
+        nivelExperiencia: document.getElementById('nivelExperiencia').value,
+        modalidade: document.getElementById('modalidade').value,
+        salario: parseFloat(document.getElementById('salario').value),
+        descricaoVaga: document.getElementById('descricaoVaga').value,
+        recrutador: { id: parseInt(recrutadorId) }
+    };
 
-  const dadosVaga = {
-    id: vagaIdInput.value,
-    nomeVaga: nomeVagaInput.value,
-    setorVaga: setorVagaInput.value,
-    pais: paisInput.value,
-    estado: estadoInput.value,
-    cidade: cidadeInput.value,
-    cep: cepInput.value.replace(/\D/g, ''),
-    status: statusInput.value,
-    nivelExperiencia: nivelExperienciaInput.value,
-    modalidade: modalidadeInput.value,
-    salario: parseFloat(salarioInput.value),
-    descricaoVaga: descricaoVagaInput.value,
-    recrutador: { id: parseInt(recrutadorId) }
-  };
-
-  fetch(`http://localhost:8080/api/vagas/${vagaIdInput.value}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(dadosVaga)
+    fetch(`http://localhost:8080/api/vagas/${vagaId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dadosVaga)
     })
-    .then(async resposta => {
-      if (resposta.ok) {
-        alert("Vaga atualizada com sucesso!");
-        window.location.href = "mainRecrutador.html";
-      } else {
-        const erroObj = await resposta.json();
-        alert(erroObj.mensagem || "Erro ao atualizar vaga.");
-      }
+    .then(async response => {
+        if (response.ok) {
+            alert("Vaga atualizada com sucesso!");
+            window.location.href = "mainRecrutador.html";
+        } else {
+            const erroObj = await response.json();
+            alert(erroObj.mensagem || "Erro ao atualizar vaga.");
+        }
     })
-    .catch(erro => console.error("Erro na conexão:", erro));
+    .catch(error => console.error("Erro na conexão:", error));
 }

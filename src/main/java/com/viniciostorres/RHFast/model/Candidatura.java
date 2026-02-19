@@ -1,5 +1,6 @@
 package com.viniciostorres.RHFast.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.viniciostorres.RHFast.model.enums.StatusCandidatura;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -30,6 +31,7 @@ public class Candidatura {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "vaga_id")
+    @JsonIgnore
     private Vaga vaga;
 
     @NotNull

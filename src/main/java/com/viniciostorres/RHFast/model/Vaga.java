@@ -10,6 +10,7 @@ import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "vagas")
@@ -60,6 +61,9 @@ public class Vaga {
     @ManyToOne
     @JoinColumn(name = "recrutador_id")
     private Recrutador recrutador;
+
+    @OneToMany(mappedBy = "vaga", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Candidatura> candidaturas;
 
     @PrePersist
     private void preCreate() {
