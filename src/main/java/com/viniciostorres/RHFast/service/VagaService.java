@@ -51,7 +51,6 @@ public class VagaService {
     }
 
     public List<Vaga> buscarVagas(String termo, String localizacao, NivelExperiencia nivel, Modalidade modalidade) {
-        // Converte para minúsculas e adiciona os coringas %
         String termoLike = (termo != null && !termo.isEmpty()) ? "%" + termo.toLowerCase() + "%" : null;
         String localizacaoLike = (localizacao != null && !localizacao.isEmpty()) ? "%" + localizacao.toLowerCase() + "%" : null;
         

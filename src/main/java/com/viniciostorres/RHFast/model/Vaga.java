@@ -6,7 +6,6 @@ import com.viniciostorres.RHFast.model.enums.StatusVaga;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -36,12 +35,12 @@ public class Vaga {
     private String cidade;
     @NotBlank
     private String cep;
-    @NotNull
-    @PastOrPresent
+    
     private LocalDate dataPostagem;
-    @NotNull
+    
     @Enumerated(EnumType.STRING)
     private StatusVaga status;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private NivelExperiencia nivelExperiencia;
