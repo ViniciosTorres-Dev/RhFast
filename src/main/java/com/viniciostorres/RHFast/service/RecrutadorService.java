@@ -33,40 +33,32 @@ public class RecrutadorService {
         String cpfLimpo = limparTexto(recrutador.getCpf());
         recrutador.setNumeroTelefone(telefoneLimpo);
         recrutador.setCpf(cpfLimpo);
-
-        // Lógica para vincular ou criar Empresa
+        
         if (recrutador.getEmpresa() != null) {
             Empresa empresaRecebida = recrutador.getEmpresa();
             
             if (empresaRecebida.getId() != null) {
-                // Se veio com ID, busca no banco para garantir que existe
                 Empresa empresaExistente = empresaRepository.findById(empresaRecebida.getId())
                         .orElseThrow(() -> new IllegalArgumentException("Empresa não encontrada com o ID informado."));
                 recrutador.setEmpresa(empresaExistente);
             } else if (empresaRecebida.getCnpj() != null) {
-                // Se não tem ID, mas tem CNPJ, tenta buscar pelo CNPJ
                 String cnpjLimpo = limparTexto(empresaRecebida.getCnpj());
                 empresaRecebida.setCnpj(cnpjLimpo);
                 
                 Optional<Empresa> empresaExistente = empresaRepository.findByCnpj(cnpjLimpo);
                 
                 if (empresaExistente.isPresent()) {
-                    // Já existe empresa com esse CNPJ, usa ela
                     recrutador.setEmpresa(empresaExistente.get());
                 } else {
-                    // Não existe, cria uma nova empresa com os dados fornecidos
-                    // Limpa formatação de campos da empresa também, se necessário
                     if(empresaRecebida.getCep() != null) empresaRecebida.setCep(limparTexto(empresaRecebida.getCep()));
                     
                     Empresa novaEmpresa = empresaRepository.save(empresaRecebida);
                     recrutador.setEmpresa(novaEmpresa);
                 }
             } else {
-                // Se não tem ID nem CNPJ, não dá pra vincular
                 throw new IllegalArgumentException("Dados da empresa inválidos (CNPJ ou ID obrigatórios).");
             }
         } else {
-             // Se o objeto empresa for nulo
              throw new IllegalArgumentException("É obrigatório informar os dados da empresa.");
         }
 

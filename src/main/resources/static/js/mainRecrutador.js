@@ -28,7 +28,7 @@ function loadVagas() {
             tbody.innerHTML = ''; 
             
             vagas.forEach(vaga => {
-                const statusBadge = vaga.status === 'ABERTA' ? '<span class="badge badge-success">Aberta</span>' : '<span class="badge badge-secondary">Fechada</span>';
+                const statusBadge = vaga.status === 'ABERTA' ? '<span class="badge badge-success">Aberta</span>' : (vaga.status === 'ENCERRADA' ? '<span class="badge badge-secondary">Encerrada</span>' : '<span class="badge badge-tertiary">Cancelada</span>');
                 
                 const nomeVaga = vaga.nomeVaga || vaga.nome || 'Sem Título';
                 const numCandidatos = vaga.candidatosCount !== undefined ? vaga.candidatosCount : (vaga.candidatos ? vaga.candidatos.length : 0);
@@ -78,7 +78,6 @@ function verVaga(id) {
             document.getElementById('modalData').innerText = new Date(vaga.dataPostagem).toLocaleDateString('pt-BR');
             document.getElementById('modalDescricao').innerText = vaga.descricaoVaga;
 
-            // Configurar botão de editar no modal
             const btnEditar = document.getElementById('btnEditarModal');
             btnEditar.onclick = function() {
                 editarVaga(vaga.id);

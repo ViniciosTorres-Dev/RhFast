@@ -61,6 +61,7 @@ public class VagaController {
         return vagaService.findById(id)
                 .map(existingVaga -> {
                     vaga.setId(id);
+                    vaga.setDataPostagem(existingVaga.getDataPostagem());
                     return ResponseEntity.ok(vagaService.save(vaga));
                 })
                 .orElse(ResponseEntity.notFound().build());
