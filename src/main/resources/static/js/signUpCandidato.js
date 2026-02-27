@@ -7,7 +7,6 @@ const cepInput = document.querySelector('input[name="cep"]');
 const cidadeInput = document.querySelector('input[name="cidade"]');
 const estadoInput = document.querySelector('input[name="estado"]');
 const ruaInput = document.querySelector('input[name="logradouro"]');
-const situacaoInput = document.querySelector('select[name="situacao"]');
 const dataNascimentoInput = document.querySelector('input[name="dataNascimento"]');
 const senhaInput = document.querySelector('input[name="senha"]');
 const confirmSenhaInput = document.querySelector('input[name="confirmSenha"]');
@@ -59,7 +58,7 @@ function cadastrarCandidato() {
     return;
   }
 
-  const inputs = [nomeInput, sobrenomeInput, cpfInput, emailInput, numeroTelefoneInput, cepInput, cidadeInput, estadoInput, ruaInput, situacaoInput, dataNascimentoInput, senhaInput, confirmSenhaInput];
+  const inputs = [nomeInput, sobrenomeInput, cpfInput, emailInput, numeroTelefoneInput, cepInput, cidadeInput, estadoInput, ruaInput, dataNascimentoInput, senhaInput, confirmSenhaInput];
   for(let input of inputs) {
       if(input && !input.value.trim()) {
           alert(`Por favor, preencha todos os campos.`);
@@ -77,7 +76,6 @@ function cadastrarCandidato() {
     cidade: cidadeInput.value,
     estado: estadoInput.value,
     logradouro: ruaInput.value,
-    situacao: situacaoInput.value,
     dataNascimento: dataNascimentoInput.value,
     senha: senhaInput.value
   };
