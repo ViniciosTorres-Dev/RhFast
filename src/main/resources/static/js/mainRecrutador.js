@@ -10,6 +10,10 @@ function checkLogin() {
     if (!recrutadorId) {
         window.location.href = 'signInRecrutador.html';
     }
+    // Se estiver logado como candidato, redireciona ou limpa
+    if (localStorage.getItem('candidatoId')) {
+        localStorage.removeItem('candidatoId');
+    }
 }
 
 function loadVagas() {
@@ -31,7 +35,7 @@ function loadVagas() {
                 const statusBadge = vaga.status === 'ABERTA' ? '<span class="badge badge-success">Aberta</span>' : (vaga.status === 'ENCERRADA' ? '<span class="badge badge-secondary">Encerrada</span>' : '<span class="badge badge-tertiary">Cancelada</span>');
                 
                 const nomeVaga = vaga.nomeVaga || vaga.nome || 'Sem Título';
-                const numCandidatos = vaga.candidatosCount !== undefined ? vaga.candidatosCount : (vaga.candidatos ? vaga.candidatos.length : 0);
+                const numCandidatos = vaga.candidaturas ? vaga.candidaturas.length : 0;
 
                 const row = `
                     <tr>
@@ -52,40 +56,48 @@ function loadVagas() {
 }
 
 function loadCandidatosRecentes() {
-    // Implementação futura
+    const recrutadorId = localStorage.getItem('recrutadorId');
+    if (!recrutadorId) return;
+
+    fetch(`http://localhost:8080/api/candidaturas/recentes/recrutador/${recrutadorId}`)
+        .then(response => response.json())
+        .then(candidaturas => {
+            const container = document.querySelector('.col-md-4 .list-group');
+            container.innerHTML = '';
+
+            candidaturas.forEach(candidatura => {
+                const item = `
+                    <div class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">${candidatura.candidatoNome}</h5>
+                            <small>${new Date(candidatura.dataInscricao).toLocaleDateString()}</small>
+                        </div>
+                        <p class="mb-1">Vaga: ${candidatura.vagaNome}</p>
+                        <small>Status: ${candidatura.status}</small>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', item);
+            });
+        })
+        .catch(error => console.error('Erro ao carregar candidatos recentes:', error));
 }
 
 function loadStats() {
-    // Implementação futura
+    const recrutadorId = localStorage.getItem('recrutadorId');
+    if (!recrutadorId) return;
+
+    fetch(`http://localhost:8080/api/stats/recrutador/${recrutadorId}`)
+        .then(response => response.json())
+        .then(stats => {
+            document.getElementById('totalVagas').textContent = stats.totalVagas;
+            document.getElementById('totalCandidatos').textContent = stats.totalCandidatos;
+            document.getElementById('vagasAbertas').textContent = stats.vagasAbertas;
+        })
+        .catch(error => console.error('Erro ao carregar estatísticas:', error));
 }
 
 function verVaga(id) {
-    fetch(`http://localhost:8080/api/vagas/${id}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro ao buscar vaga');
-            }
-            return response.json();
-        })
-        .then(vaga => {
-            document.getElementById('modalNomeVaga').innerText = vaga.nomeVaga || vaga.nome;
-            document.getElementById('modalSetorVaga').innerText = vaga.setorVaga;
-            document.getElementById('modalSalario').innerText = vaga.salario;
-            document.getElementById('modalModalidade').innerText = vaga.modalidade;
-            document.getElementById('modalNivel').innerText = vaga.nivelExperiencia;
-            document.getElementById('modalStatus').innerText = vaga.status;
-            document.getElementById('modalLocal').innerText = `${vaga.cidade} - ${vaga.estado}`;
-            document.getElementById('modalData').innerText = new Date(vaga.dataPostagem).toLocaleDateString('pt-BR');
-            document.getElementById('modalDescricao').innerText = vaga.descricaoVaga;
-
-            const btnEditar = document.getElementById('btnEditarModal');
-            btnEditar.onclick = function() {
-                editarVaga(vaga.id);
-            };
-
-            $('#vagaModal').modal('show');
-        })
-        .catch(error => console.error('Erro:', error));
+    window.location.href = `detalhesVaga.html?id=${id}`;
 }
 
 function editarVaga(id) {
@@ -93,16 +105,17 @@ function editarVaga(id) {
 }
 
 function deletarVaga(id) {
-    if (confirm("Tem certeza que deseja deletar esta vaga?")) {
+    if (confirm('Tem certeza que deseja deletar esta vaga?')) {
         fetch(`http://localhost:8080/api/vagas/${id}`, {
             method: 'DELETE'
         })
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Erro ao deletar vaga');
+            if (response.ok) {
+                loadVagas();
+                loadStats();
+            } else {
+                alert('Erro ao deletar vaga');
             }
-            alert('Vaga deletada com sucesso!');
-            loadVagas();
         })
         .catch(error => console.error('Erro:', error));
     }

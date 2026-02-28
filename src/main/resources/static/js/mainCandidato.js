@@ -8,6 +8,10 @@ function checkLogin() {
     if (!candidatoId) {
         window.location.href = 'signInCandidato.html';
     }
+    // Se estiver logado como recrutador, redireciona ou limpa
+    if (localStorage.getItem('recrutadorId')) {
+        localStorage.removeItem('recrutadorId');
+    }
 }
 
 async function loadVagas(filtros = {}) {

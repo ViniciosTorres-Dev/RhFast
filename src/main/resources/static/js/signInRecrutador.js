@@ -103,6 +103,8 @@
         .then(async resposta => {
             if (resposta.ok) {
                 const dados = await resposta.json();
+                // Limpa dados de candidato para evitar conflito
+                localStorage.removeItem('candidatoId');
                 // Salva o ID do recrutador para usar nas requisições autenticadas
                 localStorage.setItem('recrutadorId', dados.id);
                 

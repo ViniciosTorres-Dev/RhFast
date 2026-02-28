@@ -84,6 +84,8 @@
         .then(async resposta => {
             if (resposta.ok) {
                 const dados = await resposta.json();
+                // Limpa dados de recrutador para evitar conflito
+                localStorage.removeItem('recrutadorId');
                 localStorage.setItem('candidatoId', dados.id);
                 window.location.href = "mainCandidato.html";
             } else {
