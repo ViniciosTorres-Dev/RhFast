@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>RH Fast - Detalhes da Vaga (Recrutador)</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" type="text/css" href="css/util.css">
+    <link rel="stylesheet" type="text/css" href="css/mainRecrutador.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="mainRecrutador.html">RH Fast</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="mainRecrutador.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Configurações</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="perfilRecrutador.html">Minha Conta</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Sair</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <div>
+                            <h3 id="tituloVaga" class="mb-0">Carregando...</h3>
+                            <p class="mb-0 text-white-50" id="empresaVaga"></p>
+                        </div>
+                        <div>
+                            <span id="statusBadge" class="badge badge-light">Status</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <p><strong>Localização:</strong> <span id="localVaga"></span></p>
+                                <p><strong>Modalidade:</strong> <span id="modalidadeVaga"></span></p>
+                                <p><strong>Nível:</strong> <span id="nivelVaga"></span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Salário:</strong> R$ <span id="salarioVaga"></span></p>
+                                <p><strong>Setor:</strong> <span id="setorVaga"></span></p>
+                                <p><strong>Publicada em:</strong> <span id="dataVaga"></span></p>
+                            </div>
+                        </div>
+
+                        <h5 class="mb-3">Descrição da Vaga</h5>
+                        <p id="descricaoVaga" class="text-justify mb-5"></p>
+
+                        <hr>
+
+                        <h5 class="mb-3">Candidatos Inscritos (<span id="countCandidatos">0</span>)</h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="tabelaCandidatos">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Data Inscrição</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Lista de candidatos -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button class="btn btn-info btn-lg" onclick="editarVaga()">Editar Vaga</button>
+                            <a href="mainRecrutador.html" class="btn btn-secondary btn-lg ml-2">Voltar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script src="vendor/bootstrap/js/popper.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/detalhesVagaRecrutador.js"></script>
+
+</body>
+</html>

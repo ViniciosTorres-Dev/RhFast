@@ -97,7 +97,7 @@ function loadStats() {
 }
 
 function verVaga(id) {
-    window.location.href = `detalhesVaga.html?id=${id}`;
+    window.location.href = `detalhesVagaRecrutador.html?id=${id}`;
 }
 
 function editarVaga(id) {
