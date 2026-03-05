@@ -31,7 +31,6 @@ public class Candidatura {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "vaga_id")
-    @JsonIgnore
     private Vaga vaga;
 
     @NotNull

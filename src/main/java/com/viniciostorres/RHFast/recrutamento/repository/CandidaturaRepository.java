@@ -19,4 +19,6 @@ public interface CandidaturaRepository extends JpaRepository<Candidatura, Long> 
     List<Long> findVagaIdsByCandidatoId(@Param("candidatoId") Long candidatoId);
 
     List<Candidatura> findByVagaId(Long vagaId);
+
+    List<Candidatura> findByCandidatoId(Long candidatoId);
 }

@@ -34,6 +34,11 @@ public class CandidaturaController {
         return candidaturaService.getVagasInscritasPorCandidato(candidatoId);
     }
 
+    @GetMapping("/candidato/{candidatoId}")
+    public List<Candidatura> getCandidaturasPorCandidato(@PathVariable Long candidatoId) {
+        return candidaturaService.getCandidaturasPorCandidato(candidatoId);
+    }
+
     @GetMapping("/vaga/{vagaId}")
     public List<Candidatura> getCandidaturasPorVaga(@PathVariable Long vagaId) {
         return candidaturaService.getCandidaturasPorVaga(vagaId);

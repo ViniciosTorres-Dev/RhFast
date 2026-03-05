@@ -22,7 +22,7 @@ function loadCandidaturas() {
             return response.json();
         })
         .then(candidaturas => {
-            const tbody = document.querySelector('table tbody');
+            const tbody = document.querySelector('#tabelaCandidaturas tbody');
             tbody.innerHTML = '';
 
             if (candidaturas.length === 0) {

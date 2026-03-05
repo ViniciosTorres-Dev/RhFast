@@ -1,5 +1,6 @@
 package com.viniciostorres.RHFast.recrutamento.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.viniciostorres.RHFast.recrutamento.model.enums.Modalidade;
 import com.viniciostorres.RHFast.recrutamento.model.enums.NivelExperiencia;
 import com.viniciostorres.RHFast.recrutamento.model.enums.StatusVaga;
@@ -62,6 +63,7 @@ public class Vaga {
     private Recrutador recrutador;
 
     @OneToMany(mappedBy = "vaga", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Candidatura> candidaturas;
 
     @PrePersist

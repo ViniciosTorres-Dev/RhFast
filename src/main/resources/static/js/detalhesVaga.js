@@ -1,32 +1,40 @@
 document.addEventListener('DOMContentLoaded', function() {
+    checkLogin();
     const urlParams = new URLSearchParams(window.location.search);
     const vagaId = urlParams.get('id');
 
     if (vagaId) {
-        carregarVaga(vagaId);
-        verificarInscricao(vagaId);
+        loadVaga(vagaId);
+        checkStatusCandidatura(vagaId);
     } else {
-        alert("Vaga não encontrada.");
-        window.location.href = "mainCandidato.html";
+        alert('Vaga não encontrada!');
+        window.location.href = 'mainCandidato.html';
     }
 });
 
-function carregarVaga(id) {
+function checkLogin() {
+    const candidatoId = localStorage.getItem('candidatoId');
+    if (!candidatoId) {
+        window.location.href = 'signInCandidato.html';
+    }
+}
+
+function loadVaga(id) {
     fetch(`http://localhost:8080/api/vagas/${id}`)
         .then(response => {
-            if (!response.ok) throw new Error('Erro ao buscar vaga');
+            if (!response.ok) throw new Error('Erro ao carregar vaga');
             return response.json();
         })
         .then(vaga => {
-            document.getElementById('tituloVaga').innerText = vaga.nomeVaga;
-            document.getElementById('empresaVaga').innerText = vaga.empresa ? vaga.empresa.nome : 'Empresa Confidencial';
-            document.getElementById('localVaga').innerText = `${vaga.cidade} - ${vaga.estado}`;
-            document.getElementById('modalidadeVaga').innerText = vaga.modalidade;
-            document.getElementById('nivelVaga').innerText = vaga.nivelExperiencia;
-            document.getElementById('salarioVaga').innerText = vaga.salario;
-            document.getElementById('setorVaga').innerText = vaga.setorVaga;
-            document.getElementById('dataVaga').innerText = new Date(vaga.dataPostagem).toLocaleDateString('pt-BR');
-            document.getElementById('descricaoVaga').innerText = vaga.descricaoVaga;
+            document.getElementById('tituloVaga').textContent = vaga.nomeVaga;
+            document.getElementById('empresaVaga').textContent = vaga.empresa ? vaga.empresa.nome : 'Empresa Confidencial';
+            document.getElementById('localVaga').textContent = `${vaga.cidade} - ${vaga.estado}`;
+            document.getElementById('modalidadeVaga').textContent = vaga.modalidade;
+            document.getElementById('nivelVaga').textContent = vaga.nivelExperiencia;
+            document.getElementById('salarioVaga').textContent = vaga.salario;
+            document.getElementById('setorVaga').textContent = vaga.setorVaga;
+            document.getElementById('dataVaga').textContent = new Date(vaga.dataPostagem).toLocaleDateString();
+            document.getElementById('descricaoVaga').textContent = vaga.descricaoVaga;
         })
         .catch(error => {
             console.error('Erro:', error);
@@ -34,47 +42,33 @@ function carregarVaga(id) {
         });
 }
 
-async function verificarInscricao(vagaId) {
+function checkStatusCandidatura(vagaId) {
     const candidatoId = localStorage.getItem('candidatoId');
     if (!candidatoId) return;
 
-    try {
-        const response = await fetch(`http://localhost:8080/api/candidaturas/candidato/${candidatoId}/vagas`);
-        if (response.ok) {
-            const vagasInscritas = await response.json();
-            if (vagasInscritas.includes(parseInt(vagaId))) {
-                const btnCandidatar = document.querySelector('button[onclick="candidatarSe()"]');
-                if (btnCandidatar) {
-                    btnCandidatar.innerText = "Já Inscrito";
-                    btnCandidatar.classList.remove('btn-success');
-                    btnCandidatar.classList.add('btn-secondary');
-                    btnCandidatar.disabled = true;
-                    btnCandidatar.onclick = null;
+    fetch(`http://localhost:8080/api/candidaturas/candidato/${candidatoId}/vagas`)
+        .then(response => response.json())
+        .then(vagasIds => {
+            // Verifica se o ID da vaga atual está na lista de vagas inscritas
+            if (vagasIds.includes(parseInt(vagaId))) {
+                const btn = document.querySelector('button[onclick="candidatarSe()"]');
+                if (btn) {
+                    btn.textContent = "Candidatura Realizada";
+                    btn.className = "btn btn-secondary btn-lg";
+                    btn.disabled = true;
+                    btn.removeAttribute('onclick');
                 }
             }
-        }
-    } catch (error) {
-        console.error('Erro ao verificar inscrição:', error);
-    }
+        })
+        .catch(error => console.error('Erro ao verificar status da candidatura:', error));
 }
 
 function candidatarSe() {
     const candidatoId = localStorage.getItem('candidatoId');
-    if (!candidatoId) {
-        alert("Você precisa estar logado para se candidatar.");
-        window.location.href = 'signInCandidato.html';
-        return;
-    }
-
     const urlParams = new URLSearchParams(window.location.search);
     const vagaId = urlParams.get('id');
 
-    if (!vagaId) {
-        alert("Erro ao identificar a vaga.");
-        return;
-    }
-
-    const dadosInscricao = {
+    const inscricaoDTO = {
         idCandidato: parseInt(candidatoId),
         idVaga: parseInt(vagaId)
     };
@@ -84,19 +78,34 @@ function candidatarSe() {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(dadosInscricao)
+        body: JSON.stringify(inscricaoDTO)
     })
     .then(async response => {
         if (response.ok) {
-            alert("Candidatura realizada com sucesso! Boa sorte!");
-            window.location.href = "mainCandidato.html";
+            alert('Candidatura realizada com sucesso!');
+            // Atualiza o botão visualmente
+            const btn = document.querySelector('button[onclick="candidatarSe()"]');
+            if (btn) {
+                btn.textContent = "Candidatura Realizada";
+                btn.className = "btn btn-secondary btn-lg";
+                btn.disabled = true;
+                btn.removeAttribute('onclick');
+            }
         } else {
-            const erroObj = await response.json();
-            alert(erroObj.mensagem || "Erro ao realizar candidatura.");
+            const error = await response.json();
+            alert(error.message || 'Erro ao realizar candidatura. Você já pode estar inscrito.');
         }
     })
     .catch(error => {
         console.error('Erro:', error);
-        alert("Erro de conexão com o servidor.");
+        alert('Erro ao conectar com o servidor.');
     });
+}
+
+function voltar() {
+    if (document.referrer.includes('minhasCandidaturas.html')) {
+        window.location.href = 'minhasCandidaturas.html';
+    } else {
+        window.location.href = 'mainCandidato.html';
+    }
 }
