@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (vagaId) {
         loadVaga(vagaId);
+        loadTestes(vagaId);
     } else {
         alert('Vaga não encontrada!');
         window.location.href = 'mainRecrutador.html';
@@ -88,6 +89,63 @@ function loadCandidatos(candidaturas) {
         `;
         tbody.insertAdjacentHTML('beforeend', row);
     });
+}
+
+function loadTestes(vagaId) {
+    fetch(`http://localhost:8080/api/testes/vaga/${vagaId}`)
+        .then(response => response.json())
+        .then(testes => {
+            const listaTestes = document.getElementById('listaTestes');
+            listaTestes.innerHTML = '';
+
+            if (testes.length === 0) {
+                listaTestes.innerHTML = '<p class="text-muted">Nenhum teste criado para esta vaga.</p>';
+                return;
+            }
+
+            const ul = document.createElement('ul');
+            ul.className = 'list-group';
+
+            testes.forEach(teste => {
+                const li = `
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>${teste.titulo}</strong>
+                            <span class="badge badge-primary badge-pill ml-2">${teste.tipo}</span>
+                        </div>
+                        <div>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deletarTeste(${teste.id}, ${vagaId})">Excluir</button>
+                        </div>
+                    </li>
+                `;
+                ul.insertAdjacentHTML('beforeend', li);
+            });
+
+            listaTestes.appendChild(ul);
+        })
+        .catch(error => console.error('Erro ao carregar testes:', error));
+}
+
+function deletarTeste(testeId, vagaId) {
+    if (confirm('Tem certeza que deseja excluir este teste?')) {
+        fetch(`http://localhost:8080/api/testes/${testeId}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                loadTestes(vagaId);
+            } else {
+                alert('Erro ao excluir teste.');
+            }
+        })
+        .catch(error => console.error('Erro:', error));
+    }
+}
+
+function criarTeste() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const vagaId = urlParams.get('id');
+    window.location.href = `criarTeste.html?vagaId=${vagaId}`;
 }
 
 function editarVaga() {

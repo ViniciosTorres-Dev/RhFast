@@ -1,18 +1,18 @@
 package com.viniciostorres.RHFast.recrutamento.model;
 
-import com.viniciostorres.RHFast.recrutamento.model.enums.Situacao;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "candidatos")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @AllArgsConstructor
 @Builder
 public class Candidato {
@@ -26,10 +26,6 @@ public class Candidato {
 
     @NotBlank
     private String sobrenome;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private Situacao situacao;
 
     @CPF(message = "CPF inválido")
     @NotBlank
@@ -79,4 +75,7 @@ public class Candidato {
             this.cep = this.cep.replaceAll("\\D", "");
         }
     }
+
+    @OneToMany(mappedBy = "candidato", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Curriculo> curriculos;
 }

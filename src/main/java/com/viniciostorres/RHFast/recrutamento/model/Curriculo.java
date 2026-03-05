@@ -1,8 +1,11 @@
 package com.viniciostorres.RHFast.recrutamento.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "curriculos")
@@ -12,4 +15,25 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class Curriculo {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @NotBlank
+    private String nomeCurriculo;
+    @ManyToOne
+    @JoinColumn(name = "candidato_id")
+    private Candidato candidato;
+    private String urlCurriculo;
+    private String tipoArquivo;
+    @CreationTimestamp
+    private LocalDateTime dataUpload;
+
+    @PrePersist
+    private void presalvarData() {
+
+        if (this.dataUpload == null) {
+            this.dataUpload = LocalDateTime.now();
+        }
+    }
 }
