@@ -133,6 +133,23 @@
             height: 100%;
             color: #65676b;
         }
+
+        /* Modal de busca de usuários */
+        .search-results {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .search-item {
+            padding: 10px;
+            border-bottom: 1px solid #f1f1f1;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .search-item:hover {
+            background-color: #f8f9fa;
+        }
     </style>
 </head>
 <body>
@@ -162,8 +179,11 @@
         <div class="chat-layout">
             <!-- Sidebar de Contatos -->
             <div class="contacts-sidebar">
-                <div class="contacts-header">
+                <div class="contacts-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Conversas</h5>
+                    <button class="btn btn-sm btn-outline-primary rounded-circle" data-toggle="modal" data-target="#searchModal" title="Nova Conversa">
+                        <i class="zmdi zmdi-plus"></i>
+                    </button>
                 </div>
                 <div class="contacts-list" id="contactsList">
                     <!-- Contatos carregados via JS -->
@@ -181,7 +201,7 @@
                     <div class="empty-state">
                         <i class="zmdi zmdi-comments zmdi-hc-4x mb-3"></i>
                         <h4>Selecione uma conversa</h4>
-                        <p>Escolha um contato à esquerda para começar a conversar.</p>
+                        <p>Escolha um contato à esquerda ou inicie uma nova conversa.</p>
                     </div>
                 </div>
 
@@ -190,6 +210,31 @@
                     <button class="btn btn-primary rounded-circle" onclick="enviarMensagem()">
                         <i class="zmdi zmdi-mail-send"></i>
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Nova Conversa -->
+    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalLabel">Nova Conversa</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="searchInput" placeholder="Buscar por nome...">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" onclick="buscarUsuarios()">Buscar</button>
+                        </div>
+                    </div>
+                    <div class="search-results" id="searchResults">
+                        <!-- Resultados da busca -->
+                    </div>
                 </div>
             </div>
         </div>

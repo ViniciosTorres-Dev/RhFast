@@ -40,7 +40,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const destNome = urlParams.get('destinatarioNome');
 
     if (destId && destTipo) {
-        selecionarContato(destId, destTipo, destNome || 'Usuário');
+        const nomeExibicao = destNome || `Usuário #${destId}`;
+        selecionarContato(destId, destTipo, nomeExibicao);
     }
 
     // Enviar mensagem ao pressionar Enter
@@ -48,6 +49,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.key === 'Enter') {
             enviarMensagem();
         }
+    });
+
+    // Ao abrir o modal de busca, carregar todos os usuários
+    $('#searchModal').on('show.bs.modal', function () {
+        buscarUsuarios(''); // Busca vazia carrega todos
     });
 });
 
@@ -64,9 +70,11 @@ function carregarContatos() {
             }
 
             contatos.forEach(contato => {
-                const avatarLetter = contato.nome.charAt(0).toUpperCase();
+                const avatarLetter = contato.nome ? contato.nome.charAt(0).toUpperCase() : '?';
+                const isActive = (contato.id == currentDestinatarioId && contato.tipo == currentDestinatarioTipo) ? 'active' : '';
+
                 const item = `
-                    <div class="contact-item" onclick="selecionarContato(${contato.id}, '${contato.tipo}', '${contato.nome}')">
+                    <div class="contact-item ${isActive}" onclick="selecionarContato(${contato.id}, '${contato.tipo}', '${contato.nome}')">
                         <div class="contact-avatar bg-secondary">${avatarLetter}</div>
                         <div>
                             <h6 class="mb-0">${contato.nome}</h6>
@@ -90,9 +98,9 @@ function selecionarContato(id, tipo, nome) {
     document.getElementById('chatHeader').style.display = 'flex';
     document.getElementById('chatInputArea').style.display = 'flex';
 
-    // Limpar mensagens anteriores
-    const chatMessages = document.getElementById('chatMessages');
-    chatMessages.innerHTML = ''; // Limpa o estado vazio
+    // Atualizar destaque na lista de contatos
+    const itens = document.querySelectorAll('.contact-item');
+    itens.forEach(item => item.classList.remove('active'));
 
     // Carregar mensagens imediatamente
     carregarMensagens();
@@ -111,7 +119,9 @@ function carregarMensagens() {
         .then(response => response.json())
         .then(mensagens => {
             const chatMessages = document.getElementById('chatMessages');
-            chatMessages.innerHTML = ''; // Limpa para re-renderizar (idealmente faria diff, mas ok para MVP)
+
+            // Lógica simples de atualização: limpa e redesenha.
+            chatMessages.innerHTML = '';
 
             if (mensagens.length === 0) {
                 chatMessages.innerHTML = '<div class="text-center text-muted mt-5">Nenhuma mensagem ainda. Diga olá!</div>';
@@ -161,9 +171,62 @@ function enviarMensagem() {
         if (response.ok) {
             input.value = '';
             carregarMensagens();
-            // Atualizar lista de contatos para garantir que o novo contato apareça se for o primeiro envio
             carregarContatos();
         }
     })
     .catch(error => console.error('Erro:', error));
+}
+
+function buscarUsuarios(termo = '') {
+    // Determina onde buscar baseado em quem está logado
+    // Se sou recrutador, busco candidatos. Se sou candidato, busco recrutadores.
+    const endpoint = currentRemetenteTipo === 'RECRUTADOR'
+        ? 'http://localhost:8080/api/candidatos'
+        : 'http://localhost:8080/api/recrutadores';
+
+    const tipoDestino = currentRemetenteTipo === 'RECRUTADOR' ? 'CANDIDATO' : 'RECRUTADOR';
+
+    fetch(endpoint)
+        .then(response => {
+            if(!response.ok) throw new Error("Erro ao buscar usuários");
+            return response.json();
+        })
+        .then(usuarios => {
+            const resultados = document.getElementById('searchResults');
+            resultados.innerHTML = '';
+
+            // Filtrar: remove o próprio usuário (embora improvável se endpoints forem diferentes) e aplica o termo de busca
+            const filtrados = usuarios.filter(u => {
+                const isSelf = (u.id == currentRemetenteId && currentRemetenteTipo === tipoDestino); // Check redundante mas seguro
+                if (isSelf) return false;
+
+                const nomeCompleto = `${u.nome} ${u.sobrenome}`.toLowerCase();
+                return nomeCompleto.includes(termo.toLowerCase());
+            });
+
+            if(filtrados.length === 0) {
+                resultados.innerHTML = '<p class="text-muted text-center mt-3">Nenhum usuário encontrado.</p>';
+                return;
+            }
+
+            filtrados.forEach(u => {
+                const nomeCompleto = `${u.nome} ${u.sobrenome}`;
+                const item = `
+                    <div class="search-item">
+                        <span>${nomeCompleto}</span>
+                        <button class="btn btn-sm btn-primary" onclick="iniciarConversa(${u.id}, '${tipoDestino}', '${nomeCompleto}')">Conversar</button>
+                    </div>
+                `;
+                resultados.insertAdjacentHTML('beforeend', item);
+            });
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById('searchResults').innerHTML = '<p class="text-danger text-center">Erro ao buscar usuários.</p>';
+        });
+}
+
+function iniciarConversa(id, tipo, nome) {
+    $('#searchModal').modal('hide');
+    selecionarContato(id, tipo, nome);
 }
