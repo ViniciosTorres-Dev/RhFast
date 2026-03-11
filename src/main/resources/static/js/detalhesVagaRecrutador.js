@@ -47,12 +47,8 @@ function loadVaga(id) {
                 statusBadge.className = 'badge badge-danger';
             }
 
-            // Carregar candidatos se houver
-            if (vaga.candidaturas) {
-                loadCandidatos(vaga.candidaturas);
-            } else {
-                loadCandidatos([]);
-            }
+            // Carregar candidatos usando o endpoint dedicado
+            loadCandidaturas(id);
         })
         .catch(error => {
             console.error('Erro:', error);
@@ -60,35 +56,44 @@ function loadVaga(id) {
         });
 }
 
-function loadCandidatos(candidaturas) {
-    const tbody = document.querySelector('#tabelaCandidatos tbody');
-    const countSpan = document.getElementById('countCandidatos');
-    tbody.innerHTML = '';
+function loadCandidaturas(vagaId) {
+    fetch(`http://localhost:8080/api/candidaturas/vaga/${vagaId}`)
+        .then(response => response.json())
+        .then(candidaturas => {
+            const tbody = document.querySelector('#tabelaCandidatos tbody');
+            const countSpan = document.getElementById('countCandidatos');
+            tbody.innerHTML = '';
 
-    if (!candidaturas || candidaturas.length === 0) {
-        countSpan.textContent = '0';
-        tbody.innerHTML = '<tr><td colspan="4" class="text-center">Nenhum candidato inscrito ainda.</td></tr>';
-        return;
-    }
+            if (!candidaturas || candidaturas.length === 0) {
+                countSpan.textContent = '0';
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center">Nenhum candidato inscrito ainda.</td></tr>';
+                return;
+            }
 
-    countSpan.textContent = candidaturas.length;
+            countSpan.textContent = candidaturas.length;
 
-    candidaturas.forEach(candidatura => {
-        const nomeCandidato = candidatura.candidato ? `${candidatura.candidato.nome} ${candidatura.candidato.sobrenome}` : 'Candidato Desconhecido';
-        const dataInscricao = new Date(candidatura.dataInscricao).toLocaleDateString();
+            candidaturas.forEach(candidatura => {
+                const nomeCandidato = candidatura.candidato ? `${candidatura.candidato.nome} ${candidatura.candidato.sobrenome}` : 'Candidato Desconhecido';
+                const dataInscricao = new Date(candidatura.dataInscricao).toLocaleDateString();
 
-        const row = `
-            <tr>
-                <td>${nomeCandidato}</td>
-                <td>${dataInscricao}</td>
-                <td>${candidatura.status}</td>
-                <td>
-                    <button class="btn btn-sm btn-info" onclick="verPerfilCandidato(${candidatura.candidato ? candidatura.candidato.id : 0})">Ver Perfil</button>
-                </td>
-            </tr>
-        `;
-        tbody.insertAdjacentHTML('beforeend', row);
-    });
+                const row = `
+                    <tr>
+                        <td>${nomeCandidato}</td>
+                        <td>${dataInscricao}</td>
+                        <td>${candidatura.status}</td>
+                        <td>
+                            <button class="btn btn-sm btn-info" onclick="verPerfilCandidato(${candidatura.candidato ? candidatura.candidato.id : 0})">Ver Perfil</button>
+                            <button class="btn btn-sm btn-primary ml-1" onclick="abrirChat(${candidatura.candidato ? candidatura.candidato.id : 0})">Chat</button>
+                        </td>
+                    </tr>
+                `;
+                tbody.insertAdjacentHTML('beforeend', row);
+            });
+        })
+        .catch(error => {
+            console.error('Erro ao carregar candidaturas:', error);
+            document.querySelector('#tabelaCandidatos tbody').innerHTML = '<tr><td colspan="4" class="text-center text-danger">Erro ao carregar candidatos.</td></tr>';
+        });
 }
 
 function loadTestes(vagaId) {
@@ -161,4 +166,12 @@ function verPerfilCandidato(id) {
     }
     // Implementar visualização do perfil do candidato (modal ou nova página)
     alert('Funcionalidade de ver perfil do candidato em desenvolvimento.');
+}
+
+function abrirChat(candidatoId) {
+    if (candidatoId === 0) {
+        alert('Candidato inválido.');
+        return;
+    }
+    window.location.href = `chat.html?destinatarioId=${candidatoId}&destinatarioTipo=CANDIDATO`;
 }

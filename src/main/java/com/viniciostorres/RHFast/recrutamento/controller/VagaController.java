@@ -1,5 +1,6 @@
 package com.viniciostorres.RHFast.recrutamento.controller;
 
+import com.viniciostorres.RHFast.recrutamento.dto.VagaListagemDTO;
 import com.viniciostorres.RHFast.recrutamento.model.Vaga;
 import com.viniciostorres.RHFast.recrutamento.model.enums.Modalidade;
 import com.viniciostorres.RHFast.recrutamento.model.enums.NivelExperiencia;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/vagas")
