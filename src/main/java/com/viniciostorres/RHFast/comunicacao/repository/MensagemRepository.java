@@ -14,9 +14,9 @@ import java.util.List;
 public interface MensagemRepository extends JpaRepository<Mensagem, Long> {
 
     @Query("SELECT m FROM Mensagem m WHERE " +
-           "((m.remetenteId = :usuario1Id AND m.remetenteTipo = :usuario1Tipo AND m.destinatarioId = :usuario2Id AND m.destinatarioTipo = :usuario2Tipo AND m.apagadaParaRemetente = false) OR " +
-           "(m.remetenteId = :usuario2Id AND m.remetenteTipo = :usuario2Tipo AND m.destinatarioId = :usuario1Id AND m.destinatarioTipo = :usuario1Tipo AND m.apagadaParaDestinatario = false)) " +
-           "ORDER BY m.dataEnvio ASC")
+            "((m.remetenteId = :usuario1Id AND m.remetenteTipo = :usuario1Tipo AND m.destinatarioId = :usuario2Id AND m.destinatarioTipo = :usuario2Tipo AND m.apagadaParaRemetente = false) OR " +
+            "(m.remetenteId = :usuario2Id AND m.remetenteTipo = :usuario2Tipo AND m.destinatarioId = :usuario1Id AND m.destinatarioTipo = :usuario1Tipo AND m.apagadaParaDestinatario = false)) " +
+            "ORDER BY m.dataEnvio ASC")
     List<Mensagem> findConversa(@Param("usuario1Id") Long usuario1Id, @Param("usuario1Tipo") String usuario1Tipo, @Param("usuario2Id") Long usuario2Id, @Param("usuario2Tipo") String usuario2Tipo);
 
     @Query("SELECT DISTINCT m.destinatarioId, m.destinatarioTipo FROM Mensagem m WHERE m.remetenteId = :usuarioId AND m.remetenteTipo = :usuarioTipo AND m.apagadaParaRemetente = false")

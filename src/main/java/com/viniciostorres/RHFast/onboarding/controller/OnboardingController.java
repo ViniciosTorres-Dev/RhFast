@@ -1,10 +1,10 @@
 package com.viniciostorres.RHFast.onboarding.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.viniciostorres.RHFast.onboarding.model.dto.CriarProcessoAdmissaoDTO;
 import com.viniciostorres.RHFast.onboarding.model.DocumentoExigido;
 import com.viniciostorres.RHFast.onboarding.model.ProcessoAdmissao;
 import com.viniciostorres.RHFast.onboarding.model.StatusDocumento;
+import com.viniciostorres.RHFast.onboarding.model.dto.CriarProcessoAdmissaoDTO;
 import com.viniciostorres.RHFast.onboarding.service.OnboardingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

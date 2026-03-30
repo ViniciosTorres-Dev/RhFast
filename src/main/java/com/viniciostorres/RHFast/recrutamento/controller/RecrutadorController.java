@@ -17,7 +17,9 @@ public class RecrutadorController {
     private final RecrutadorService recrutadorService;
 
     @GetMapping
-    public List<Recrutador> getAll() {return recrutadorService.getAll();}
+    public List<Recrutador> getAll() {
+        return recrutadorService.getAll();
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Recrutador> getById(@PathVariable Long id) {
@@ -32,7 +34,9 @@ public class RecrutadorController {
     }
 
     @PostMapping
-    public Recrutador create(@Valid @RequestBody Recrutador recrutador) { return recrutadorService.save(recrutador);}
+    public Recrutador create(@Valid @RequestBody Recrutador recrutador) {
+        return recrutadorService.save(recrutador);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<Recrutador> login(@RequestBody Recrutador loginData) {

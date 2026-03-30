@@ -14,7 +14,9 @@ import com.viniciostorres.RHFast.recrutamento.model.Candidato;
 import com.viniciostorres.RHFast.recrutamento.model.Vaga;
 import com.viniciostorres.RHFast.recrutamento.repository.CandidatoRepository;
 import com.viniciostorres.RHFast.recrutamento.repository.VagaRepository;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +26,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
+@Setter
 @Service
 @RequiredArgsConstructor
 public class TesteService {
@@ -81,9 +85,9 @@ public class TesteService {
         testeExistente.setTitulo(testeAtualizado.getTitulo());
         testeExistente.setTipo(testeAtualizado.getTipo());
         testeExistente.setDescricao(testeAtualizado.getDescricao());
-        
+
         testeExistente.getPerguntas().clear();
-        
+
         if (testeAtualizado.getPerguntas() != null) {
             testeAtualizado.getPerguntas().forEach(p -> {
                 p.setTeste(testeExistente);
@@ -93,7 +97,7 @@ public class TesteService {
 
         return testeRepository.save(testeExistente);
     }
-    
+
     @Transactional
     public void deletarTeste(Long id) {
         Teste teste = testeRepository.findById(id)
@@ -102,7 +106,7 @@ public class TesteService {
         for (Vaga vaga : teste.getVagas()) {
             vaga.getTestes().remove(teste);
         }
-        
+
         List<SubmissaoTeste> submissoes = submissaoTesteRepository.findByTesteId(id);
         submissaoTesteRepository.deleteAll(submissoes);
 
@@ -112,7 +116,9 @@ public class TesteService {
     @Transactional
     public SubmissaoTeste salvarSubmissao(SubmissaoDTO submissaoDTO) {
         submissaoTesteRepository.findByTesteIdAndCandidatoId(submissaoDTO.getTesteId(), submissaoDTO.getCandidatoId())
-                .ifPresent(s -> { throw new IllegalStateException("Este teste já foi submetido por este candidato."); });
+                .ifPresent(s -> {
+                    throw new IllegalStateException("Este teste já foi submetido por este candidato.");
+                });
 
         Teste teste = testeRepository.findById(submissaoDTO.getTesteId())
                 .orElseThrow(() -> new RuntimeException("Teste não encontrado"));
@@ -165,14 +171,14 @@ public class TesteService {
         try {
             @SuppressWarnings("unchecked")
             List<Integer> respostasCandidato = ((List<Object>) resposta).stream()
-                                                    .map(o -> Integer.parseInt(o.toString()))
-                                                    .collect(Collectors.toList());
+                    .map(o -> Integer.parseInt(o.toString()))
+                    .collect(Collectors.toList());
 
             List<Integer> respostasCorretas = pergunta.getRespostasCorretas();
-            
+
             Collections.sort(respostasCandidato);
             Collections.sort(respostasCorretas);
-            
+
             return respostasCandidato.equals(respostasCorretas);
         } catch (Exception e) {
             return false;
@@ -182,7 +188,7 @@ public class TesteService {
     public boolean verificarSeTesteFoiConcluido(Long testeId, Long candidatoId) {
         return submissaoTesteRepository.findByTesteIdAndCandidatoId(testeId, candidatoId).isPresent();
     }
-    
+
     public List<Teste> listarTestesPorVaga(Long vagaId) {
         return vagaRepository.findById(vagaId).map(Vaga::getTestes).orElse(Collections.emptyList());
     }

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <title>RH Fast - Perfil do Recrutador</title>
+
+    <!--favicon-->
+    <link href="images/icons/favicon.ico" rel="icon" type="image/x-icon">
+
+    <!-- Bootstrap core CSS-->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Icons CSS-->
+    <link href="fonts/iconic/css/material-design-iconic-font.min.css" rel="stylesheet" type="text/css"/>
+
+    <!-- Custom Style-->
+    <link href="css/mainRecrutador.css" rel="stylesheet"/>
+
+    <style>
+        .profile-header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+        .profile-header img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid rgba(255,255,255,0.2);
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            font-weight: 500;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 5px;
+        }
+        .form-control[readonly] {
+            background-color: rgba(255,255,255,0.05);
+            cursor: not-allowed;
+        }
+        body.bg-theme-light .profile-header {
+            border-bottom-color: #ddd;
+        }
+        body.bg-theme-light .form-control[readonly] {
+            background-color: #e9ecef;
+        }
+    </style>
+</head>
+
+<body class="bg-theme bg-theme1">
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand text-white" href="mainRecrutador.html">
+            <i class="zmdi zmdi-fire text-white mr-2"></i>RH Fast
+        </a>
+        <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+                data-target="#navbarNav" data-toggle="collapse" type="button">
+            <span class="zmdi zmdi-menu text-white" style="font-size: 24px;"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="mainRecrutador.html"><i
+                            class="zmdi zmdi-view-dashboard mr-1"></i> Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="chat.html"><i class="zmdi zmdi-comment-text mr-1"></i> Chat</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="configuracoesRecrutador.html"><i
+                            class="zmdi zmdi-settings mr-1"></i> Configurações</a>
+                </li>
+                <li class="nav-item active dropdown">
+                    <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle text-white" data-toggle="dropdown"
+                       href="#" id="navbarDropdown" role="button">
+                        <i class="zmdi zmdi-account-circle mr-1"></i> Minha Conta
+                    </a>
+                    <div aria-labelledby="navbarDropdown" class="dropdown-menu dropdown-menu-right"
+                         style="background-color: #000;">
+                        <a class="dropdown-item text-white" href="perfilRecrutador.html">Perfil</a>
+                        <div class="dropdown-divider" style="border-top: 1px solid rgba(255, 255, 255, 0.14);"></div>
+                        <a class="dropdown-item text-white" href="#" onclick="logout()"><i
+                                class="zmdi zmdi-power mr-2"></i> Sair</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="clearfix"></div>
+
+<div class="content-wrapper" style="margin-left: 0; padding-top: 90px;">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="profile-header">
+                            <img alt="Avatar do Recrutador" id="profileAvatar" src="https://placehold.co/120x120">
+                            <h4 class="mt-2 text-white" id="profileNameDisplay">Carregando...</h4>
+                            <p class="text-white-50" id="profileEmailDisplay">Carregando...</p>
+                        </div>
+
+                        <h5 class="mb-3 text-white">Dados do Perfil</h5>
+                        <form id="perfilForm">
+                            <input id="recrutadorId" type="hidden">
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label for="nome">Nome</label>
+                                    <input class="form-control" id="nome" required type="text">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label for="sobrenome">Sobrenome</label>
+                                    <input class="form-control" id="sobrenome" required type="text">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label for="cpf">CPF</label>
+                                    <input class="form-control" id="cpf" required type="text">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label for="cargo">Cargo</label>
+                                    <input class="form-control" id="cargo" required type="text">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label for="email">Email</label>
+                                    <input class="form-control" id="email" required type="email">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label for="telefone">Telefone</label>
+                                    <input class="form-control" id="telefone" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="senha">Nova Senha (deixe em branco para não alterar)</label>
+                                <input class="form-control" id="senha" type="password">
+                            </div>
+                            <div class="form-group mt-4">
+                                <button class="btn btn-primary" type="submit"><i class="zmdi zmdi-save"></i> Salvar
+                                    Alterações
+                                </button>
+                                <button class="btn btn-secondary ml-2" onclick="window.history.back()" type="button">
+                                    Voltar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+<script src="vendor/bootstrap/js/popper.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/sidebar-menu.js"></script>
+<script src="js/app-script.js"></script>
+<script src="js/logout.js"></script>
+<script src="js/perfilRecrutador.js"></script>
+
+</body>
+</html>

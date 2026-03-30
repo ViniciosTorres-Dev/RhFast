@@ -1,75 +1,86 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="utf-8"/>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-  <title>RH Fast - Iniciar Onboarding</title>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+    <title>RH Fast - Iniciar Onboarding</title>
 
-  <link rel="icon" href="images/icons/favicon.ico" type="image/x-icon">
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="fonts/iconic/css/material-design-iconic-font.min.css" rel="stylesheet" type="text/css"/>
-  <link href="css/mainRecrutador.css" rel="stylesheet"/>
+    <link href="images/icons/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="fonts/iconic/css/material-design-iconic-font.min.css" rel="stylesheet" type="text/css"/>
+    <link href="css/mainRecrutador.css" rel="stylesheet"/>
 </head>
 
 <body class="bg-theme bg-theme1">
 
 <nav class="navbar navbar-expand-lg fixed-top">
-  <div class="container-fluid">
-    <a class="navbar-brand text-white" href="mainRecrutador.html"><i class="zmdi zmdi-fire mr-2"></i>RH Fast</a>
-  </div>
+    <div class="container-fluid">
+        <a class="navbar-brand text-white" href="mainRecrutador.html"><i class="zmdi zmdi-fire mr-2"></i>RH Fast</a>
+    </div>
 </nav>
 
 <div class="clearfix"></div>
 
 <div class="content-wrapper" style="margin-left: 0; padding-top: 90px;">
-  <div class="container-fluid">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <button class="btn btn-secondary mb-3" onclick="window.history.back()"><i class="zmdi zmdi-arrow-left"></i> Voltar</button>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <button class="btn btn-secondary mb-3" onclick="window.history.back()"><i
+                        class="zmdi zmdi-arrow-left"></i> Voltar
+                </button>
 
-        <div class="card">
-            <div class="card-header text-white">
-                Iniciar Processo de Admissão
-            </div>
-            <div class="card-body">
-                <p>Candidato: <strong id="nomeCandidato">Carregando...</strong></p>
-                <form id="formOnboarding">
-                    <input type="hidden" id="vagaId">
-                    <input type="hidden" id="candidatoId">
-
-                    <div class="form-group">
-                        <label>Instruções Gerais para o Candidato</label>
-                        <textarea class="form-control" id="instrucoesGerais" rows="4" placeholder="Descreva os próximos passos, onde fazer exame médico, horários..."></textarea>
+                <div class="card">
+                    <div class="card-header text-white">
+                        Iniciar Processo de Admissão
                     </div>
+                    <div class="card-body">
+                        <p>Candidato: <strong id="nomeCandidato">Carregando...</strong></p>
+                        <form id="formOnboarding">
+                            <input id="vagaId" type="hidden">
+                            <input id="candidatoId" type="hidden">
 
-                    <hr class="my-4 border-light">
-                    <h5 class="text-white">Documentos Exigidos</h5>
-                    <p class="small text-muted">Defina quais documentos o candidato precisará enviar.</p>
+                            <div class="form-group">
+                                <label>Instruções Gerais para o Candidato</label>
+                                <label for="instrucoesGerais"></label><textarea class="form-control"
+                                                                                id="instrucoesGerais" placeholder="Descreva os próximos passos, onde fazer exame médico, horários..."
+                                                                                rows="4"></textarea>
+                            </div>
 
-                    <div id="documentosContainer">
-                        <!-- Itens dinâmicos -->
+                            <hr class="my-4 border-light">
+                            <h5 class="text-white">Documentos Exigidos</h5>
+                            <p class="small text-muted">Defina quais documentos o candidato precisará enviar.</p>
+
+                            <div id="documentosContainer">
+                                <!-- Itens dinâmicos -->
+                            </div>
+                            <button class="btn btn-sm btn-outline-info mt-2" onclick="adicionarDocumento()"
+                                    type="button"><i class="zmdi zmdi-plus"></i> Adicionar Documento
+                            </button>
+
+                            <hr class="my-4 border-light">
+                            <h5 class="text-white">Anexar Manuais e Guias</h5>
+                            <p class="small text-muted">Anexe arquivos para o candidato baixar (ex: Manual de
+                                Integração, Guia Médico).</p>
+
+                            <div id="anexosContainer">
+                                <!-- Itens dinâmicos -->
+                            </div>
+                            <button class="btn btn-sm btn-outline-info mt-2" onclick="adicionarAnexo()" type="button"><i
+                                    class="zmdi zmdi-plus"></i> Adicionar Anexo
+                            </button>
+
+                            <div class="form-group mt-5">
+                                <button class="btn btn-primary btn-block" type="submit"><i
+                                        class="zmdi zmdi-mail-send"></i> Enviar Solicitação ao Candidato
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                    <button type="button" class="btn btn-sm btn-outline-info mt-2" onclick="adicionarDocumento()"><i class="zmdi zmdi-plus"></i> Adicionar Documento</button>
-
-                    <hr class="my-4 border-light">
-                    <h5 class="text-white">Anexar Manuais e Guias</h5>
-                    <p class="small text-muted">Anexe arquivos para o candidato baixar (ex: Manual de Integração, Guia Médico).</p>
-
-                    <div id="anexosContainer">
-                        <!-- Itens dinâmicos -->
-                    </div>
-                    <button type="button" class="btn btn-sm btn-outline-info mt-2" onclick="adicionarAnexo()"><i class="zmdi zmdi-plus"></i> Adicionar Anexo</button>
-
-                    <div class="form-group mt-5">
-                        <button type="submit" class="btn btn-primary btn-block"><i class="zmdi zmdi-mail-send"></i> Enviar Solicitação ao Candidato</button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 
 <script src="vendor/jquery/jquery-3.2.1.min.js"></script>

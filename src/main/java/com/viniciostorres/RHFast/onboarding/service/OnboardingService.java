@@ -1,11 +1,11 @@
 package com.viniciostorres.RHFast.onboarding.service;
 
 import com.viniciostorres.RHFast.avaliacoes.service.FileStorageService;
-import com.viniciostorres.RHFast.onboarding.model.dto.CriarProcessoAdmissaoDTO;
 import com.viniciostorres.RHFast.onboarding.model.AnexoInstrucao;
 import com.viniciostorres.RHFast.onboarding.model.DocumentoExigido;
 import com.viniciostorres.RHFast.onboarding.model.ProcessoAdmissao;
 import com.viniciostorres.RHFast.onboarding.model.StatusDocumento;
+import com.viniciostorres.RHFast.onboarding.model.dto.CriarProcessoAdmissaoDTO;
 import com.viniciostorres.RHFast.onboarding.repository.DocumentoExigidoRepository;
 import com.viniciostorres.RHFast.onboarding.repository.ProcessoAdmissaoRepository;
 import com.viniciostorres.RHFast.recrutamento.model.Candidato;
@@ -33,7 +33,7 @@ public class OnboardingService {
     @Autowired
     private CandidatoRepository candidatoRepository;
     @Autowired
-    private FileStorageService fileStorageService; 
+    private FileStorageService fileStorageService;
 
     @Transactional
     public ProcessoAdmissao iniciarProcessoAdmissao(CriarProcessoAdmissaoDTO dto, Map<String, MultipartFile> arquivosInstrucao) {

@@ -19,7 +19,9 @@ public class CandidatoService {
     private final EmailService emailService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public List<Candidato> getAll() { return candidatoRepository.findAll();}
+    public List<Candidato> getAll() {
+        return candidatoRepository.findAll();
+    }
 
     public Candidato save(Candidato candidato) {
         boolean isNovoCadastro = (candidato.getId() == null);
@@ -50,7 +52,7 @@ public class CandidatoService {
             }
 
             if (!existingCandidato.getNumeroTelefone().equals(telefoneLimpo)) {
-                 if (candidatoRepository.existsByNumeroTelefone(telefoneLimpo) || recrutadorRepository.existsByNumeroTelefone(telefoneLimpo)) {
+                if (candidatoRepository.existsByNumeroTelefone(telefoneLimpo) || recrutadorRepository.existsByNumeroTelefone(telefoneLimpo)) {
                     throw new IllegalArgumentException("Esse número de telefone já está cadastrado");
                 }
             }
@@ -72,7 +74,9 @@ public class CandidatoService {
         return salvo;
     }
 
-    public void delete(Long id) { candidatoRepository.deleteById(id);}
+    public void delete(Long id) {
+        candidatoRepository.deleteById(id);
+    }
 
     public Optional<Candidato> findById(Long id) {
         return candidatoRepository.findById(id);

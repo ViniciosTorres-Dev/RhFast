@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <title>RH Fast - Configurações</title>
+
+    <!--favicon-->
+    <link href="images/icons/favicon.ico" rel="icon" type="image/x-icon">
+
+    <!-- Bootstrap core CSS-->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Icons CSS-->
+    <link href="fonts/iconic/css/material-design-iconic-font.min.css" rel="stylesheet" type="text/css"/>
+
+    <!-- Custom Style-->
+    <link href="css/mainRecrutador.css" rel="stylesheet"/>
+
+    <style>
+        .theme-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .theme-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .theme-btn:hover {
+            transform: scale(1.1);
+        }
+        .theme-btn.active {
+            border-color: #7934f3;
+        }
+        .theme-dark {
+            background-image: linear-gradient(45deg, #29323c, #485563);
+        }
+        .theme-light {
+            background-color: #f1f2f7;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body class="bg-theme bg-theme1">
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand text-white" href="mainRecrutador.html">
+            <i class="zmdi zmdi-fire text-white mr-2"></i>RH Fast
+        </a>
+        <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+                data-target="#navbarNav" data-toggle="collapse" type="button">
+            <span class="zmdi zmdi-menu text-white" style="font-size: 24px;"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="mainRecrutador.html"><i
+                            class="zmdi zmdi-view-dashboard mr-1"></i> Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="chat.html"><i class="zmdi zmdi-comment-text mr-1"></i> Chat</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link text-white" href="configuracoesRecrutador.html"><i
+                            class="zmdi zmdi-settings mr-1"></i> Configurações</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle text-white" data-toggle="dropdown"
+                       href="#" id="navbarDropdown" role="button">
+                        <i class="zmdi zmdi-account-circle mr-1"></i> Minha Conta
+                    </a>
+                    <div aria-labelledby="navbarDropdown" class="dropdown-menu dropdown-menu-right"
+                         style="background-color: #000;">
+                        <a class="dropdown-item text-white" href="perfilRecrutador.html">Perfil</a>
+                        <div class="dropdown-divider" style="border-top: 1px solid rgba(255, 255, 255, 0.14);"></div>
+                        <a class="dropdown-item text-white" href="#" onclick="logout()"><i
+                                class="zmdi zmdi-power mr-2"></i> Sair</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="clearfix"></div>
+
+<div class="content-wrapper" style="margin-left: 0; padding-top: 90px;">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        Configurações da Conta
+                    </div>
+                    <div class="card-body">
+                        <p>Nesta página você pode alterar suas configurações. (Funcionalidade em desenvolvimento)</p>
+
+                        <div class="mb-4">
+                            <label>Acessibilidade: Tema do Sistema</label>
+                            <p class="text-white-50 small-font mb-2">Escolha o tema de cores para a plataforma.</p>
+                            <div class="theme-options">
+                                <div class="theme-btn theme-dark active" id="btn-theme-dark"
+                                     onclick="setTheme('dark')" title="Modo Escuro (Padrão)"></div>
+                                <div class="theme-btn theme-light" id="btn-theme-light" onclick="setTheme('light')"
+                                     title="Modo Claro"></div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            Em breve você poderá gerenciar notificações, alterar senha, e configurações de privacidade
+                            aqui.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="vendor/bootstrap/js/popper.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/app-script.js"></script>
+<script src="js/logout.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const currentTheme = localStorage.getItem('rhfast_theme') || 'dark';
+        if (currentTheme === 'light') {
+            document.getElementById('btn-theme-light').classList.add('active');
+            document.getElementById('btn-theme-dark').classList.remove('active');
+        }
+    });
+
+    function setTheme(theme) {
+        localStorage.setItem('rhfast_theme', theme);
+
+        document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+        if (theme === 'light') {
+            document.getElementById('btn-theme-light').classList.add('active');
+        } else {
+            document.getElementById('btn-theme-dark').classList.add('active');
+        }
+
+        if (window.applyGlobalTheme) {
+            window.applyGlobalTheme(theme);
+        }
+    }
+</script>
+
+</body>
+</html>

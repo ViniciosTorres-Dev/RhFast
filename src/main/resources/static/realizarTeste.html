@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+    <title>RH Fast - Realizando Teste</title>
+    <link href="images/icons/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="fonts/iconic/css/material-design-iconic-font.min.css" rel="stylesheet" type="text/css"/>
+    <link href="css/mainCandidato.css" rel="stylesheet"/>
+    <style>
+        .pergunta-container { min-height: 300px; }
+        .opcao-label { display: block; padding: 12px 15px; border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; margin-bottom: 10px; cursor: pointer; transition: all 0.2s ease-in-out; }
+        .opcao-label:hover { background: rgba(255,255,255,0.1); }
+        .opcao-label.selected { background: #007bff; border-color: #007bff; color: #fff; }
+        .progress-bar { transition: width 0.4s ease; }
+        #teste-imagem-capa, #pergunta-imagem { max-height: 300px; width: auto; max-width: 100%; border-radius: 5px; margin-bottom: 15px; }
+    </style>
+</head>
+<body class="bg-theme bg-theme1">
+
+<div class="content-wrapper" style="margin-left: 0; padding-top: 50px;">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div id="tela-introducao">
+                        <div class="card-header text-center"><h4 id="teste-titulo-intro">Carregando Teste...</h4></div>
+                        <div class="card-body text-center">
+                            <img alt="Imagem do Teste" class="mb-3" id="teste-imagem-capa" src=""
+                                 style="display: none;"/>
+                            <p class="text-white-50" id="teste-descricao-intro" style="font-size: 1.1rem;"></p>
+                            <p class="text-muted mt-4">Você terá um tempo limitado para concluir. O cronômetro iniciará
+                                assim que você clicar no botão abaixo.</p>
+                            <button class="btn btn-primary btn-lg mt-3" onclick="iniciarExame()">Iniciar Teste</button>
+                        </div>
+                    </div>
+                    <div id="tela-exame" style="display: none;">
+                        <div class="card-header text-center">
+                            <h4 id="teste-titulo"></h4>
+                            <p class="text-muted small" id="teste-descricao"></p>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center mb-3 font-weight-bold" id="timer"></div>
+
+                            <!-- Contêiner para a imagem da pergunta -->
+                            <div class="text-center" id="imagem-pergunta-container" style="display: none;">
+                                <img alt="Imagem da Pergunta" id="pergunta-imagem" src=""/>
+                            </div>
+
+                            <div class="progress mb-4">
+                                <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="0" class="progress-bar"
+                                     id="progress-bar" role="progressbar" style="width: 0%;"></div>
+                            </div>
+                            <div class="pergunta-container" id="pergunta-container"></div>
+                            <div class="d-flex justify-content-between mt-4">
+                                <button class="btn btn-secondary" disabled id="btn-anterior"
+                                        onclick="mostrarQuestaoAnterior()">Anterior
+                                </button>
+                                <button class="btn btn-info" id="btn-proxima" onclick="mostrarProximaQuestao()">
+                                    Próxima
+                                </button>
+                                <button class="btn btn-success" id="btn-finalizar" onclick="finalizarTeste()"
+                                        style="display: none;">Finalizar Teste
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="vendor/bootstrap/js/popper.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/realizarTeste.js"></script>
+
+</body>
+</html>

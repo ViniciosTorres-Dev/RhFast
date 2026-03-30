@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+    <title>RH Fast - Mensagens</title>
+
+    <link href="images/icons/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="fonts/iconic/css/material-design-iconic-font.min.css" rel="stylesheet" type="text/css"/>
+    <link href="css/mainRecrutador.css" rel="stylesheet"/>
+    <!-- Novo CSS do Chat -->
+    <link href="css/chat.css" rel="stylesheet"/>
+</head>
+
+<body class="bg-theme bg-theme1">
+
+<!-- Barra de Navegação -->
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand text-white" href="#" id="homeLink"><i class="zmdi zmdi-fire mr-2"></i>RH Fast</a>
+        <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+                data-target="#navbarNav" data-toggle="collapse" type="button">
+            <span class="zmdi zmdi-menu text-white" style="font-size: 24px;"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto align-items-center">
+                <li class="nav-item" id="dashboardNav"><a class="nav-link text-white" href="#" id="dashboardLink"><i
+                        class="zmdi zmdi-view-dashboard mr-1"></i> Dashboard</a></li>
+                <li class="nav-item" id="vagasNav" style="display: none;"><a class="nav-link text-white"
+                                                                             href="mainCandidato.html"><i
+                        class="zmdi zmdi-view-list-alt mr-1"></i> Vagas</a></li>
+                <li class="nav-item" id="candidaturasNav" style="display: none;"><a class="nav-link text-white"
+                                                                                    href="minhasCandidaturas.html"><i
+                        class="zmdi zmdi-case-check mr-1"></i> Minhas Candidaturas</a></li>
+                <li class="nav-item active"><a class="nav-link text-white" href="chat.html"><i
+                        class="zmdi zmdi-comment-text mr-1"></i> Mensagens</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="#" id="configuracoesLink2"><i
+                        class="zmdi zmdi-settings mr-1"></i> Configurações</a></li>
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle text-white" data-toggle="dropdown"
+                       href="#" id="navbarDropdown" role="button"><i
+                            class="zmdi zmdi-account-circle mr-1"></i> Minha Conta</a>
+                    <div aria-labelledby="navbarDropdown" class="dropdown-menu dropdown-menu-right"
+                         style="background-color: #000;">
+                        <a class="dropdown-item text-white" href="#" id="perfilLink">Perfil</a>
+                        <div class="dropdown-divider" style="border-top: 1px solid rgba(255, 255, 255, 0.14);"></div>
+                        <a class="dropdown-item text-white" href="#" onclick="logout()"><i
+                                class="zmdi zmdi-power mr-2"></i> Sair</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="clearfix"></div>
+
+<div class="content-wrapper" style="margin-left: 0; padding-top: 80px;">
+    <div class="container-fluid">
+        <div class="main-container">
+            <!-- Sidebar (Lista de Contatos) -->
+            <aside class="sidebar" id="chatSidebar">
+                <div class="sidebar-header">
+                    <h4 class="mb-0">Mensagens</h4>
+                </div>
+                <div class="sidebar-search">
+                    <label for="searchInput"></label><input class="form-control" id="searchInput" placeholder="Pesquisar ou iniciar nova conversa..."
+                                                            type="text">
+                </div>
+                <div class="sidebar-content" id="contactListWrapper">
+                    <!-- Resultados da busca aparecerão aqui -->
+                    <ul class="contact-list" id="searchResults" style="display: none;"></ul>
+                    <!-- Contatos existentes aparecerão aqui -->
+                    <ul class="contact-list" id="contactList">
+                        <li class="p-3 text-center text-muted">Carregando contatos...</li>
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- Área Principal do Chat -->
+            <main class="chat-area" id="chatMain">
+                <!-- Cabeçalho do Chat -->
+                <header class="chat-header justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-link d-md-none" id="btnBackToContacts"><i
+                                class="zmdi zmdi-arrow-left"></i></button>
+                        <div class="contact-info d-flex align-items-center">
+                            <div class="avatar-placeholder" id="chatHeaderAvatar"></div>
+                            <div class="contact-details">
+                                <h5 class="contact-name" id="chatHeaderName">Selecione uma conversa</h5>
+                                <p class="contact-status mb-0" id="chatHeaderStatus">Offline</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Botão de Apagar Conversa -->
+                    <div>
+                        <button class="btn btn-outline-danger btn-sm d-none" id="btnDeleteConversation"
+                                onclick="apagarConversa()" title="Apagar Conversa Inteira para mim"><i
+                                class="zmdi zmdi-delete"></i></button>
+                    </div>
+                </header>
+
+                <!-- Mensagens -->
+                <div class="chat-body" id="chatMessages">
+                    <div class="chat-start">
+                        <i class="zmdi zmdi-comments"></i>
+                        <p>Selecione uma conversa para começar</p>
+                    </div>
+                </div>
+
+                <!-- Input de Mensagem -->
+                <footer class="chat-footer">
+                    <form class="input-group" id="chatForm">
+                        <label for="messageInput"></label><input autocomplete="off" class="form-control" disabled
+                                                                 id="messageInput" placeholder="Digite sua mensagem..."
+                                                                 type="text">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" disabled id="btnSendMessage" type="submit"><i
+                                    class="zmdi zmdi-mail-send"></i></button>
+                        </div>
+                    </form>
+                </footer>
+            </main>
+        </div>
+    </div>
+</div>
+
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="vendor/bootstrap/js/popper.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/logout.js"></script>
+<script src="js/chat.js"></script>
+
+</body>
+</html>

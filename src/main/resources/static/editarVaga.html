@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+    <title>RH Fast - Editar Vaga</title>
+    <link href="images/icons/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="fonts/iconic/css/material-design-iconic-font.min.css" rel="stylesheet" type="text/css"/>
+    <link href="css/mainRecrutador.css" rel="stylesheet"/>
+</head>
+<body class="bg-theme bg-theme1">
+
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand text-white" href="mainRecrutador.html"><i class="zmdi zmdi-fire text-white mr-2"></i>RH
+            Fast</a>
+    </div>
+</nav>
+
+<div class="clearfix"></div>
+
+<div class="content-wrapper" style="margin-left: 0; padding-top: 90px;">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header text-white">Editar Vaga</div>
+                    <div class="card-body">
+                        <form id="editarVagaForm">
+                            <input id="vagaId" type="hidden">
+                            <input id="recrutadorId" type="hidden">
+                            <input id="empresaId" type="hidden">
+                            <div class="form-group">
+                                <label for="nomeVaga">Título da Vaga</label>
+                                <input class="form-control" id="nomeVaga" required type="text">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label for="setorVaga">Setor</label>
+                                    <input class="form-control" id="setorVaga" required type="text">
+                                </div>
+                                <div class="col-md-6 form-group">
+                                    <label for="salario">Salário</label>
+                                    <input class="form-control" id="salario" required type="number">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <label for="cep">CEP</label>
+                                    <input class="form-control" id="cep" required type="text">
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="cidade">Cidade</label>
+                                    <input class="form-control" id="cidade" required type="text">
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="estado">Estado</label>
+                                    <input class="form-control" id="estado" required type="text">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <label for="pais">País</label>
+                                    <input class="form-control" id="pais" required type="text">
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="nivelExperiencia">Nível de Experiência</label>
+                                    <select class="form-control" id="nivelExperiencia" required>
+                                        <option value="JUNIOR">Júnior</option>
+                                        <option value="PLENO">Pleno</option>
+                                        <option value="SENIOR">Sênior</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="modalidade">Modalidade</label>
+                                    <select class="form-control" id="modalidade" required>
+                                        <option value="PRESENCIAL">Presencial</option>
+                                        <option value="HIBRIDO">Híbrido</option>
+                                        <option value="REMOTO">Remoto</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="descricaoVaga">Descrição</label>
+                                <textarea class="form-control" id="descricaoVaga" required rows="5"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <select class="form-control" id="status" required>
+                                    <option value="ABERTA">Aberta</option>
+                                    <option value="ENCERRADA">Encerrada</option>
+                                    <option value="CANCELADA">Cancelada</option>
+                                </select>
+                            </div>
+
+                            <hr class="my-4 border-light">
+                            <h5 class="text-white">Testes Associados</h5>
+                            <p class="small text-muted">Selecione os testes que serão aplicados para esta vaga.</p>
+                            <div class="form-group" id="testesContainer">
+                                <p class="text-center text-muted">Carregando testes...</p>
+                            </div>
+
+                            <div class="form-group mt-4">
+                                <button class="btn btn-primary" type="submit"><i class="zmdi zmdi-save"></i> Salvar
+                                    Alterações
+                                </button>
+                                <button class="btn btn-secondary ml-2" onclick="window.history.back()" type="button">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+<script src="vendor/bootstrap/js/popper.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/logout.js"></script>
+<script src="js/editarVaga.js"></script>
+
+</body>
+</html>

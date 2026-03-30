@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+    <title>RH Fast - Detalhes da Vaga</title>
+    <link href="images/icons/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="fonts/iconic/css/material-design-iconic-font.min.css" rel="stylesheet" type="text/css"/>
+    <link href="css/mainCandidato.css" rel="stylesheet"/>
+    <style>
+        .vaga-header { border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 15px; margin-bottom: 20px; }
+        .badge-info-vaga { font-size: 0.85rem; padding: 8px 12px; margin-right: 10px; margin-bottom: 10px; border-radius: 20px; background: rgba(255,255,255,0.1); color: #fff; display: inline-block; }
+        .badge-info-vaga i { margin-right: 5px; color: #14b6ff; }
+        .section-title { font-weight: 500; color: #14b6ff; margin-bottom: 15px; margin-top: 30px; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
+        #empresaVagaLink:hover { text-decoration: underline; }
+    </style>
+</head>
+<body class="bg-theme bg-theme1">
+
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand text-white" href="mainCandidato.html"><i class="zmdi zmdi-fire text-white mr-2"></i>RH
+            Fast</a>
+    </div>
+</nav>
+
+<div class="clearfix"></div>
+
+<div class="content-wrapper" style="margin-left: 0; padding-top: 90px;">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-9">
+                <button class="btn btn-secondary mb-3" onclick="voltar()"><i class="zmdi zmdi-arrow-left"></i> Voltar
+                </button>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="vaga-header">
+                            <h3 class="mb-1 text-white" id="tituloVaga">Carregando...</h3>
+                            <p class="mb-0 text-white-50"><i class="zmdi zmdi-city mr-1"></i>
+                                <a class="text-white-50" href="#" id="empresaVagaLink"><span id="empresaVaga">...</span></a>
+                            </p>
+                        </div>
+                        <div class="mb-4">
+                            <div class="badge-info-vaga"><i class="zmdi zmdi-pin"></i> <span id="localVaga">...</span>
+                            </div>
+                            <div class="badge-info-vaga"><i class="zmdi zmdi-case"></i> <span
+                                    id="modalidadeVaga">...</span></div>
+                            <div class="badge-info-vaga"><i class="zmdi zmdi-money"></i> <span
+                                    id="salarioVaga">...</span></div>
+                            <div class="badge-info-vaga"><i class="zmdi zmdi-layers"></i> <span
+                                    id="nivelVaga">...</span></div>
+                            <div class="badge-info-vaga"><i class="zmdi zmdi-label"></i> <span id="setorVaga">...</span>
+                            </div>
+                            <div class="badge-info-vaga"><i class="zmdi zmdi-calendar"></i> <span
+                                    id="dataVaga">...</span></div>
+                        </div>
+                        <h5 class="section-title">Descrição da Vaga</h5>
+                        <p class="text-white-50" id="descricaoVaga" style="white-space: pre-line;">Carregando...</p>
+                        <div class="mt-4 text-center" id="divBotaoCandidatar"></div>
+                    </div>
+                </div>
+                <div class="card mt-4" id="secaoTestes" style="display: none;">
+                    <div class="card-header text-white"><h5 class="section-title mt-0 mb-0">Próximas Etapas: Testes</h5>
+                    </div>
+                    <div class="card-body" id="listaTestes"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="vendor/bootstrap/js/popper.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/sidebar-menu.js"></script>
+<script src="js/app-script.js"></script>
+<script src="js/logout.js"></script>
+<script src="js/detalhesVaga.js"></script>
+
+</body>
+</html>

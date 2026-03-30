@@ -1,8 +1,8 @@
 package com.viniciostorres.RHFast.recrutamento.service;
 
-import com.viniciostorres.RHFast.avaliacoes.service.TesteService;
 import com.viniciostorres.RHFast.avaliacoes.model.Teste;
 import com.viniciostorres.RHFast.avaliacoes.repository.TesteRepository;
+import com.viniciostorres.RHFast.avaliacoes.service.TesteService;
 import com.viniciostorres.RHFast.recrutamento.dto.DashboardRecrutadorDTO;
 import com.viniciostorres.RHFast.recrutamento.dto.VagaRequestDTO;
 import com.viniciostorres.RHFast.recrutamento.model.Candidatura;
@@ -56,15 +56,15 @@ public class VagaService {
     @Transactional(readOnly = true)
     public DashboardRecrutadorDTO getDashboardData(Long recrutadorId) {
         DashboardRecrutadorDTO dto = new DashboardRecrutadorDTO();
-        
+
         List<Vaga> vagasDoRecrutador = vagaRepository.findByRecrutadorId(recrutadorId);
         List<Candidatura> candidaturasDoRecrutador = candidaturaRepository.findByRecrutadorId(recrutadorId);
-        
+
         LocalDate hoje = LocalDate.now();
 
         dto.setTotalVagasAbertas(vagasDoRecrutador.stream().filter(v -> "ABERTA".equals(v.getStatus().toString())).count());
         dto.setVagasEncerradas(vagasDoRecrutador.stream().filter(v -> "ENCERRADA".equals(v.getStatus().toString())).count());
-        
+
         dto.setTotalCandidatosInscritos(candidaturasDoRecrutador.size());
         dto.setCandidaturasHoje(candidaturasDoRecrutador.stream().filter(c -> c.getDataInscricao().toLocalDate().isEqual(hoje)).count());
         dto.setCandidatosEmAnalise(candidaturasDoRecrutador.stream().filter(c -> c.getStatus() == StatusCandidatura.PENDENTE || c.getStatus() == StatusCandidatura.ANALISE_RH).count());
@@ -72,15 +72,15 @@ public class VagaService {
         dto.setCandidatosReprovados(candidaturasDoRecrutador.stream().filter(c -> c.getStatus() == StatusCandidatura.REPROVADO).count());
 
         Map<String, Long> candidaturasPorMes = IntStream.rangeClosed(1, 12)
-            .mapToObj(month -> Month.of(month).name())
-            .collect(Collectors.toMap(
-                monthName -> monthName.substring(0, 3),
-                monthName -> candidaturasDoRecrutador.stream()
+                .mapToObj(month -> Month.of(month).name())
+                .collect(Collectors.toMap(
+                        monthName -> monthName.substring(0, 3),
+                        monthName -> candidaturasDoRecrutador.stream()
                                 .filter(c -> c.getDataInscricao().getMonth() == Month.valueOf(monthName))
                                 .count(),
-                (v1, v2) -> v1,
-                java.util.LinkedHashMap::new
-            ));
+                        (v1, v2) -> v1,
+                        java.util.LinkedHashMap::new
+                ));
         dto.setCandidaturasPorMes(candidaturasPorMes);
 
         List<Long> vagaIds = vagasDoRecrutador.stream().map(Vaga::getId).collect(Collectors.toList());
@@ -89,11 +89,25 @@ public class VagaService {
         return dto;
     }
 
-    public List<Vaga> findAll() { return vagaRepository.findAll(); }
-    public Optional<Vaga> findById(Long id) { return vagaRepository.findById(id); }
-    public List<Vaga> findByRecrutadorId(Long recrutadorId) { return vagaRepository.findByRecrutadorId(recrutadorId); }
-    public List<Vaga> findByEmpresaId(Long empresaId) { return vagaRepository.findByEmpresaId(empresaId); }
-    public void delete(Long id) { vagaRepository.deleteById(id); }
+    public List<Vaga> findAll() {
+        return vagaRepository.findAll();
+    }
+
+    public Optional<Vaga> findById(Long id) {
+        return vagaRepository.findById(id);
+    }
+
+    public List<Vaga> findByRecrutadorId(Long recrutadorId) {
+        return vagaRepository.findByRecrutadorId(recrutadorId);
+    }
+
+    public List<Vaga> findByEmpresaId(Long empresaId) {
+        return vagaRepository.findByEmpresaId(empresaId);
+    }
+
+    public void delete(Long id) {
+        vagaRepository.deleteById(id);
+    }
 
     public List<Vaga> buscarVagas(String termo, String localizacao, NivelExperiencia nivel, Modalidade modalidade) {
         return vagaRepository.findAll().stream()
@@ -108,7 +122,7 @@ public class VagaService {
     public Vaga save(VagaRequestDTO dto) {
         Empresa empresa = empresaRepository.findById(dto.getEmpresaId()).orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
         Recrutador recrutador = recrutadorRepository.findById(dto.getRecrutadorId()).orElseThrow(() -> new RuntimeException("Recrutador não encontrado"));
-        
+
         List<Teste> testes = new ArrayList<>();
         if (dto.getTestesIds() != null) {
             testes.addAll(testeRepository.findAllById(dto.getTestesIds()));

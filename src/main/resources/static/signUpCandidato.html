@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+    <title>RH Fast - Cadastro Candidato</title>
+    <link href="images/icons/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="fonts/iconic/css/material-design-iconic-font.min.css" rel="stylesheet" type="text/css"/>
+    <link href="css/mainCandidato.css" rel="stylesheet"/>
+    <style>
+        body {
+            height: auto;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 0;
+        }
+        .card-authentication1 {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body class="bg-theme bg-theme1">
+
+<div class="card-authentication1">
+    <div class="card">
+        <div class="card-body">
+            <div class="card-content p-2">
+                <div class="text-center">
+                    <i class="zmdi zmdi-fire text-white" style="font-size: 40px;"></i>
+                    <h5 class="text-white mt-3">Cadastro de Candidato</h5>
+                </div>
+                <form class="mt-4" id="formSignupCandidato">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="nome">Nome</label>
+                            <input class="form-control input-shadow" id="nome" placeholder="Seu Nome" required
+                                   type="text">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="sobrenome">Sobrenome</label>
+                            <input class="form-control input-shadow" id="sobrenome" placeholder="Seu Sobrenome"
+                                   required type="text">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="email">Email</label>
+                            <input class="form-control input-shadow" id="email" placeholder="seu@email.com" required
+                                   type="email">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="numeroTelefone">Telefone</label>
+                            <input class="form-control input-shadow" id="numeroTelefone" placeholder="(99) 99999-9999"
+                                   required type="text">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="dataNascimento">Data de Nascimento</label>
+                            <input class="form-control input-shadow" id="dataNascimento" required type="date">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="cpf">CPF</label>
+                            <input class="form-control input-shadow" id="cpf" placeholder="999.999.999-99" required
+                                   type="text">
+                        </div>
+                    </div>
+                    <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="cep">CEP</label>
+                            <input class="form-control input-shadow" id="cep" placeholder="99999-999" required
+                                   type="text">
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="logradouro">Endereço</label>
+                            <input class="form-control input-shadow" id="logradouro" placeholder="Rua, Avenida..."
+                                   required type="text">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="cidade">Cidade</label>
+                            <input class="form-control input-shadow" id="cidade" placeholder="Sua Cidade" required
+                                   type="text">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="estado">Estado</label>
+                            <input class="form-control input-shadow" id="estado" placeholder="Seu Estado" required
+                                   type="text">
+                        </div>
+                    </div>
+                    <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="senha">Senha</label>
+                            <input class="form-control input-shadow" id="senha" placeholder="Mínimo 8 caracteres"
+                                   required type="password">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="confirmSenha">Confirmar Senha</label>
+                            <input class="form-control input-shadow" id="confirmSenha" placeholder="Confirme sua senha"
+                                   required type="password">
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary btn-block waves-effect waves-light mt-4" type="submit">Cadastrar
+                    </button>
+
+                    <div class="text-center mt-3">
+                        <p class="text-warning mb-0" id="signupMessage"></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card-footer text-center py-3">
+            <p class="text-white-50 mb-0">Já tem uma conta? <a href="signInCandidato.html"> Faça Login</a></p>
+            <p class="text-white-50 mb-0 mt-2"><a href="index.html">Voltar para o Início</a></p>
+        </div>
+    </div>
+</div>
+
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+<script src="js/signUpCandidato.js"></script>
+
+</body>
+</html>

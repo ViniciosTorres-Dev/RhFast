@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+    <title>RH Fast - Detalhes da Vaga</title>
+    <link href="images/icons/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="fonts/iconic/css/material-design-iconic-font.min.css" rel="stylesheet" type="text/css"/>
+    <link href="css/mainRecrutador.css" rel="stylesheet"/>
+    <style>
+        .vaga-header { border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 15px; margin-bottom: 20px; }
+        .badge-info-vaga { font-size: 0.85rem; padding: 8px 12px; margin-right: 10px; margin-bottom: 10px; border-radius: 20px; background: rgba(255,255,255,0.1); color: #fff; display: inline-block; }
+        .badge-info-vaga i { margin-right: 5px; color: #14b6ff; }
+        .section-title { font-weight: 500; color: #14b6ff; margin-bottom: 15px; margin-top: 30px; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
+    </style>
+</head>
+<body class="bg-theme bg-theme1">
+
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand text-white" href="mainRecrutador.html"><i class="zmdi zmdi-fire text-white mr-2"></i>RH
+            Fast</a>
+    </div>
+</nav>
+
+<div class="clearfix"></div>
+
+<div class="content-wrapper" style="margin-left: 0; padding-top: 90px;">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <button class="btn btn-secondary mb-3" onclick="window.history.back()"><i
+                        class="zmdi zmdi-arrow-left"></i> Voltar
+                </button>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="vaga-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <h3 class="mb-1 text-white" id="tituloVaga">Carregando...</h3>
+                                <p class="mb-0 text-white-50"><i class="zmdi zmdi-city mr-1"></i> <span
+                                        id="empresaVaga">...</span></p>
+                            </div>
+                            <span class="badge" id="statusBadge"></span>
+                        </div>
+                        <div class="mb-4">
+                            <div class="badge-info-vaga"><i class="zmdi zmdi-pin"></i> <span id="localVaga">...</span>
+                            </div>
+                            <div class="badge-info-vaga"><i class="zmdi zmdi-case"></i> <span
+                                    id="modalidadeVaga">...</span></div>
+                            <div class="badge-info-vaga"><i class="zmdi zmdi-money"></i> <span
+                                    id="salarioVaga">...</span></div>
+                            <div class="badge-info-vaga"><i class="zmdi zmdi-layers"></i> <span
+                                    id="nivelVaga">...</span></div>
+                            <div class="badge-info-vaga"><i class="zmdi zmdi-label"></i> <span id="setorVaga">...</span>
+                            </div>
+                            <div class="badge-info-vaga"><i class="zmdi zmdi-calendar"></i> <span
+                                    id="dataVaga">...</span></div>
+                        </div>
+                        <h5 class="section-title">Descrição da Vaga</h5>
+                        <p class="text-white-50" id="descricaoVaga" style="white-space: pre-line;">Carregando...</p>
+                        <div class="mt-4">
+                            <button class="btn btn-info" onclick="editarVaga()"><i class="zmdi zmdi-edit"></i> Editar
+                                Vaga
+                            </button>
+                            <button class="btn btn-warning ml-2" data-target="#modalMudarStatus" data-toggle="modal"><i
+                                    class="zmdi zmdi-swap"></i> Alterar Status
+                            </button>
+                            <button class="btn btn-danger ml-2" onclick="deletarVaga()"><i class="zmdi zmdi-delete"></i>
+                                Apagar Vaga
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-4">
+                    <div class="card-header d-flex justify-content-between align-items-center text-white">Testes da Vaga
+                        <button class="btn btn-sm btn-primary" onclick="criarTeste()">Criar Novo Teste</button>
+                    </div>
+                    <div class="card-body" id="listaTestes"><p class="text-muted">Carregando testes...</p></div>
+                </div>
+                <div class="card mt-4">
+                    <div class="card-header text-white">Candidatos Inscritos (<span id="countCandidatos">0</span>)</div>
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush table-hover">
+                            <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Data Inscrição</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tabelaCandidatos">
+                            <tr>
+                                <td class="text-center" colspan="4">Carregando...</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Mudar Status -->
+<div class="modal fade" id="modalMudarStatus">
+    <div class="modal-dialog">
+        <div class="modal-content border-light">
+            <div class="modal-header"><h5 class="modal-title text-white">Alterar Status da Vaga</h5>
+                <button class="close text-white" data-dismiss="modal" type="button"><span>&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <p>Selecione o novo status para esta vaga.</p>
+                <div class="form-group">
+                    <label for="selectStatusVaga">Status</label>
+                    <select class="form-control" id="selectStatusVaga">
+                        <option value="ABERTA">Aberta</option>
+                        <option value="ENCERRADA">Encerrada</option>
+                        <option value="CANCELADA">Cancelada</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Cancelar</button>
+                <button class="btn btn-primary" id="btnSalvarStatus" onclick="salvarNovoStatus()" type="button"><i
+                        class="zmdi zmdi-save"></i> Salvar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="vendor/bootstrap/js/popper.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/sidebar-menu.js"></script>
+<script src="js/app-script.js"></script>
+<script src="js/logout.js"></script>
+<script src="js/detalhesVagaRecrutador.js"></script>
+
+</body>
+</html>

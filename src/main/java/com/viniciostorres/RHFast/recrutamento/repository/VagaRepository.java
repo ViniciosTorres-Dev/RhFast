@@ -11,10 +11,11 @@ import java.util.List;
 @Repository
 public interface VagaRepository extends JpaRepository<Vaga, Long> {
     List<Vaga> findByRecrutadorId(Long recrutadorId);
+
     List<Vaga> findByEmpresaId(Long empresaId);
 
     // Nova consulta para encontrar vagas onde o candidato NÃO se inscreveu
     @Query("SELECT v FROM Vaga v WHERE v.status = 'ABERTA' AND v.id NOT IN " +
-           "(SELECT c.vaga.id FROM Candidatura c WHERE c.candidato.id = :candidatoId)")
+            "(SELECT c.vaga.id FROM Candidatura c WHERE c.candidato.id = :candidatoId)")
     List<Vaga> findVagasNaoInscritas(@Param("candidatoId") Long candidatoId);
 }

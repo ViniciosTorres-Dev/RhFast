@@ -17,7 +17,9 @@ public class CandidatoController {
     private final CandidatoService candidatoService;
 
     @GetMapping
-    public List<Candidato> getAll() {return candidatoService.getAll();}
+    public List<Candidato> getAll() {
+        return candidatoService.getAll();
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Candidato> getById(@PathVariable Long id) {
@@ -27,7 +29,9 @@ public class CandidatoController {
     }
 
     @PostMapping
-    public Candidato create(@Valid @RequestBody Candidato candidato) { return candidatoService.save(candidato);}
+    public Candidato create(@Valid @RequestBody Candidato candidato) {
+        return candidatoService.save(candidato);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<Candidato> login(@RequestBody Candidato loginData) {

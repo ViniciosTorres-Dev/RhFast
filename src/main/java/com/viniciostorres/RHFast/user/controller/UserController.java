@@ -1,7 +1,7 @@
 package com.viniciostorres.RHFast.user.controller;
 
-import com.viniciostorres.RHFast.user.service.UserService;
 import com.viniciostorres.RHFast.user.model.dto.UserSearchDTO;
+import com.viniciostorres.RHFast.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

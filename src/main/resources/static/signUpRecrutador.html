@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <title>RH Fast - Cadastro Recrutador</title>
+
+    <!--favicon-->
+    <link href="images/icons/favicon.ico" rel="icon" type="image/x-icon">
+
+    <!-- Bootstrap core CSS-->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Icons CSS-->
+    <link href="fonts/iconic/css/material-design-iconic-font.min.css" rel="stylesheet" type="text/css"/>
+
+    <!-- Custom Style-->
+    <link href="css/mainRecrutador.css" rel="stylesheet"/>
+
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card-authentication1 {
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+        body.bg-theme-light .card-content h5 {
+            color: #333 !important;
+        }
+        body.bg-theme-light .card-content i {
+            color: #14b6ff !important;
+        }
+    </style>
+</head>
+
+<body class="bg-theme bg-theme1">
+
+<div class="card-authentication1">
+    <div class="card">
+        <div class="card-body">
+            <div class="card-content p-2">
+                <div class="text-center">
+                    <i class="zmdi zmdi-fire text-white" style="font-size: 40px;"></i>
+                    <h5 class="text-white mt-3">Cadastro de Recrutador</h5>
+                </div>
+                <form class="mt-4" id="formSignupRecrutador">
+                    <div class="form-group">
+                        <label class="sr-only" for="nomeRecrutador">Nome Completo</label>
+                        <div class="position-relative has-icon-right">
+                            <input class="form-control input-shadow" id="nomeRecrutador" placeholder="Nome Completo"
+                                   required type="text">
+                            <div class="form-control-position">
+                                <i class="icon-user"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="emailRecrutador">Email</label>
+                        <div class="position-relative has-icon-right">
+                            <input class="form-control input-shadow" id="emailRecrutador" placeholder="Email"
+                                   required type="email">
+                            <div class="form-control-position">
+                                <i class="icon-envelope-open"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="cnpjRecrutador">CNPJ / Empresa</label>
+                        <div class="position-relative has-icon-right">
+                            <input class="form-control input-shadow" id="cnpjRecrutador" placeholder="CNPJ ou Empresa"
+                                   required type="text">
+                            <div class="form-control-position">
+                                <i class="icon-briefcase"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="senhaRecrutador">Senha</label>
+                        <div class="position-relative has-icon-right">
+                            <input class="form-control input-shadow" id="senhaRecrutador" placeholder="Senha"
+                                   required type="password">
+                            <div class="form-control-position">
+                                <i class="icon-lock"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-info btn-block waves-effect waves-light mt-4" type="submit">Cadastrar
+                    </button>
+
+                    <div class="text-center mt-3">
+                        <p class="text-warning mb-0" id="signupMessage"></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card-footer text-center py-3">
+            <p class="text-white-50 mb-0">Já tem uma conta? <a href="signInRecrutador.html"> Faça Login</a></p>
+            <p class="text-white-50 mb-0 mt-2"><a href="index.html">Voltar para o Início</a></p>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="vendor/bootstrap/js/popper.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/app-script.js"></script>
+<script src="js/signUpRecrutador.js"></script>
+
+</body>
+</html>

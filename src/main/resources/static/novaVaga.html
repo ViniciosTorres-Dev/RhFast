@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+    <title>RH Fast - Nova Vaga</title>
+    <link href="images/icons/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="fonts/iconic/css/material-design-iconic-font.min.css" rel="stylesheet" type="text/css"/>
+    <link href="css/mainRecrutador.css" rel="stylesheet"/>
+</head>
+<body class="bg-theme bg-theme1">
+
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand text-white" href="mainRecrutador.html"><i class="zmdi zmdi-fire text-white mr-2"></i>RH
+            Fast</a>
+    </div>
+</nav>
+
+<div class="clearfix"></div>
+
+<div class="content-wrapper" style="margin-left: 0; padding-top: 90px;">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header text-white">Criar Nova Vaga</div>
+                    <div class="card-body">
+                        <form id="novaVagaForm">
+                            <!-- Campos da Vaga -->
+                            <div class="form-group">
+                                <label for="nomeVaga">Título da Vaga</label>
+                                <input class="form-control" id="nomeVaga" placeholder="Ex: Desenvolvedor Java Senior" required
+                                       type="text">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 form-group"><label for="setorVaga">Setor</label><input class="form-control"
+                                                                                                            id="setorVaga"
+                                                                                                            placeholder="Ex: Tecnologia"
+                                                                                                            required
+                                                                                                            type="text">
+                                </div>
+                                <div class="col-md-4 form-group"><label for="salario">Salário</label><input
+                                        class="form-control" id="salario" placeholder="Ex: 8000" required type="number">
+                                </div>
+                                <div class="col-md-4 form-group"><label for="modalidade">Modalidade</label><select
+                                        class="form-control" id="modalidade" required>
+                                    <option value="PRESENCIAL">Presencial</option>
+                                    <option value="HIBRIDO">Híbrido</option>
+                                    <option value="REMOTO">Remoto</option>
+                                </select></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <label for="cep">CEP</label>
+                                    <input class="form-control" id="cep" placeholder="00000-000" required type="text">
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="cidade">Cidade</label>
+                                    <input class="form-control" id="cidade" required type="text">
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <label for="estado">Estado</label>
+                                    <input class="form-control" id="estado" required type="text">
+                                </div>
+                            </div>
+                            <div class="form-group text-center">
+                                <small class="text-warning" id="cepStatus"></small>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 form-group"><label for="pais">País</label><input class="form-control"
+                                                                                                      id="pais"
+                                                                                                      required type="text"
+                                                                                                      value="Brasil">
+                                </div>
+                                <div class="col-md-6 form-group"><label for="nivelExperiencia">Nível</label><select
+                                        class="form-control" id="nivelExperiencia" required>
+                                    <option value="JUNIOR">Júnior</option>
+                                    <option value="PLENO">Pleno</option>
+                                    <option value="SENIOR">Sênior</option>
+                                </select></div>
+                            </div>
+                            <div class="form-group"><label for="descricaoVaga">Descrição</label><textarea
+                                    class="form-control" id="descricaoVaga" required rows="5"></textarea></div>
+
+                            <hr class="my-4 border-light">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="text-white">Testes Associados</h5>
+                                    <p class="small text-muted mb-0">Selecione os testes para esta vaga.</p>
+                                </div>
+                                <button class="btn btn-sm btn-info" data-target="#modalCriarTeste" data-toggle="modal"
+                                        type="button"><i class="zmdi zmdi-plus"></i> Criar Novo Teste
+                                </button>
+                            </div>
+                            <div class="form-group mt-3" id="testesContainer"><p class="text-center text-muted">
+                                Carregando...</p></div>
+
+                            <div class="form-group mt-4">
+                                <button class="btn btn-primary" type="submit"><i class="zmdi zmdi-plus"></i> Publicar
+                                    Vaga
+                                </button>
+                                <button class="btn btn-secondary ml-2" onclick="window.history.back()" type="button">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Criar Teste Completo -->
+<div class="modal fade" id="modalCriarTeste" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content border-light">
+            <div class="modal-header">
+                <h5 class="modal-title text-white">Criar Novo Teste</h5>
+                <button class="close text-white" data-dismiss="modal" type="button"><span>&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form id="formCriarTesteModal">
+                    <div class="form-group"><label>Título do Teste</label><label for="tituloTesteModal"></label><input
+                            class="form-control" id="tituloTesteModal" required type="text"></div>
+                    <div class="row">
+                        <div class="col-md-6 form-group"><label>Tipo</label><label for="tipoTesteModal"></label><select
+                                class="form-control" id="tipoTesteModal" required>
+                            <option value="TECNICO">Técnico</option>
+                            <option value="COMPORTAMENTAL">Comportamental</option>
+                            <option value="LOGICA">Lógica</option>
+                        </select></div>
+                        <div class="col-md-6 form-group"><label>Tempo Recomendado (minutos)</label><label
+                                for="tempoTesteModal"></label><input class="form-control" id="tempoTesteModal"
+                                                                     type="number" value="30"></div>
+                    </div>
+                    <div class="form-group"><label>Descrição / Instruções</label><label
+                            for="descricaoTesteModal"></label><textarea class="form-control" id="descricaoTesteModal"
+                                                                        required rows="3"></textarea></div>
+
+                    <hr class="my-3 border-light">
+                    <h5 class="text-white">Questões</h5>
+                    <div id="questoesContainerModal"></div>
+                    <button class="btn btn-secondary btn-sm mt-2" onclick="adicionarQuestaoModal()" type="button"><i
+                            class="zmdi zmdi-plus"></i> Adicionar Questão
+                    </button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Cancelar</button>
+                <button class="btn btn-primary" id="btnSalvarTesteModal" type="button"><i class="zmdi zmdi-save"></i>
+                    Salvar Teste
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+<script src="vendor/bootstrap/js/popper.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/logout.js"></script>
+<script src="js/novaVaga.js"></script>
+
+</body>
+</html>

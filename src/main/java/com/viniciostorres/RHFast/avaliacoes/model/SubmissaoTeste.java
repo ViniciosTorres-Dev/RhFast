@@ -3,10 +3,14 @@ package com.viniciostorres.RHFast.avaliacoes.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.viniciostorres.RHFast.recrutamento.model.Candidato;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 public class SubmissaoTeste {
 
@@ -16,7 +20,7 @@ public class SubmissaoTeste {
 
     @ManyToOne
     @JoinColumn(name = "teste_id", nullable = false)
-    @JsonIgnore 
+    @JsonIgnore
     private Teste teste;
 
     @ManyToOne
@@ -26,7 +30,7 @@ public class SubmissaoTeste {
     @Column(nullable = false)
     private LocalDateTime dataSubmissao;
 
-    private Double pontuacao; 
+    private Double pontuacao;
 
     @OneToMany(mappedBy = "submissaoTeste", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RespostaSubmetida> respostas;
@@ -35,17 +39,4 @@ public class SubmissaoTeste {
     public void prePersist() {
         dataSubmissao = LocalDateTime.now();
     }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public Teste getTeste() { return teste; }
-    public void setTeste(Teste teste) { this.teste = teste; }
-    public Candidato getCandidato() { return candidato; }
-    public void setCandidato(Candidato candidato) { this.candidato = candidato; }
-    public LocalDateTime getDataSubmissao() { return dataSubmissao; }
-    public void setDataSubmissao(LocalDateTime dataSubmissao) { this.dataSubmissao = dataSubmissao; }
-    public Double getPontuacao() { return pontuacao; }
-    public void setPontuacao(Double pontuacao) { this.pontuacao = pontuacao; }
-    public List<RespostaSubmetida> getRespostas() { return respostas; }
-    public void setRespostas(List<RespostaSubmetida> respostas) { this.respostas = respostas; }
 }

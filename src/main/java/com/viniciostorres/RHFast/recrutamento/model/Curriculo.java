@@ -22,12 +22,12 @@ public class Curriculo {
     private Long id;
     @NotBlank
     private String nomeCurriculo;
-    
+
     @ManyToOne
     @JoinColumn(name = "candidato_id")
     @JsonIgnore // Evita loop infinito na serialização
     private Candidato candidato;
-    
+
     private String urlCurriculo;
     private String tipoArquivo;
     @CreationTimestamp

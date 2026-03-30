@@ -22,11 +22,11 @@ public class UserService {
     public List<UserSearchDTO> searchUsers(String query) {
         List<UserSearchDTO> candidatos = candidatoRepository.searchByNome(query).stream()
                 .map(c -> new UserSearchDTO(c.getId(), c.getNome() + " " + c.getSobrenome(), "CANDIDATO", null))
-                .collect(Collectors.toList());
+                .toList();
 
         List<UserSearchDTO> recrutadores = recrutadorRepository.searchByNomeOrEmpresa(query).stream()
                 .map(r -> new UserSearchDTO(r.getId(), r.getNome() + " " + r.getSobrenome(), "RECRUTADOR", r.getEmpresa() != null ? r.getEmpresa().getNome() : null))
-                .collect(Collectors.toList());
+                .toList();
 
         return Stream.concat(candidatos.stream(), recrutadores.stream())
                 .collect(Collectors.toList());

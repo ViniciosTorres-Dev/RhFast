@@ -40,7 +40,7 @@ public class FileController {
                     // Fallback
                 }
 
-                if(contentType == null) {
+                if (contentType == null) {
                     contentType = "application/octet-stream";
                 }
 

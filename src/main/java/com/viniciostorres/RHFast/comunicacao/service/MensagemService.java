@@ -88,10 +88,10 @@ public class MensagemService {
                 }
             }
         }
-        
+
         // Conta as mensagens não lidas recebidas deste contato
         long mensagensNaoLidas = mensagemRepository.countByDestinatarioIdAndDestinatarioTipoAndLidaIsFalseAndRemetenteIdAndRemetenteTipoAndApagadaParaDestinatarioIsFalse(
-            usuarioLogadoId, usuarioLogadoTipo, id, tipo);
+                usuarioLogadoId, usuarioLogadoTipo, id, tipo);
 
         return new ContatoDTO(id, nome, tipo, empresa, mensagensNaoLidas);
     }

@@ -10,6 +10,8 @@ import java.util.Optional;
 @Repository
 public interface ProcessoAdmissaoRepository extends JpaRepository<ProcessoAdmissao, Long> {
     List<ProcessoAdmissao> findByCandidatoId(Long candidatoId);
+
     List<ProcessoAdmissao> findByVagaId(Long vagaId);
+
     Optional<ProcessoAdmissao> findByVagaIdAndCandidatoId(Long vagaId, Long candidatoId);
 }

@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface SubmissaoTesteRepository extends JpaRepository<SubmissaoTeste, Long> {
     Optional<SubmissaoTeste> findByTesteIdAndCandidatoId(Long testeId, Long candidatoId);
-    
+
     long countByTesteIdIn(List<Long> testeIds);
 
     List<SubmissaoTeste> findByTesteId(Long testeId);

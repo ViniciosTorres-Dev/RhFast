@@ -33,10 +33,10 @@ public class RecrutadorService {
         String cpfLimpo = limparTexto(recrutador.getCpf());
         recrutador.setNumeroTelefone(telefoneLimpo);
         recrutador.setCpf(cpfLimpo);
-        
+
         if (recrutador.getEmpresa() != null) {
             Empresa empresaRecebida = recrutador.getEmpresa();
-            
+
             if (empresaRecebida.getId() != null) {
                 Empresa empresaExistente = empresaRepository.findById(empresaRecebida.getId())
                         .orElseThrow(() -> new IllegalArgumentException("Empresa não encontrada com o ID informado."));
@@ -44,14 +44,14 @@ public class RecrutadorService {
             } else if (empresaRecebida.getCnpj() != null) {
                 String cnpjLimpo = limparTexto(empresaRecebida.getCnpj());
                 empresaRecebida.setCnpj(cnpjLimpo);
-                
+
                 Optional<Empresa> empresaExistente = empresaRepository.findByCnpj(cnpjLimpo);
-                
+
                 if (empresaExistente.isPresent()) {
                     recrutador.setEmpresa(empresaExistente.get());
                 } else {
-                    if(empresaRecebida.getCep() != null) empresaRecebida.setCep(limparTexto(empresaRecebida.getCep()));
-                    
+                    if (empresaRecebida.getCep() != null) empresaRecebida.setCep(limparTexto(empresaRecebida.getCep()));
+
                     Empresa novaEmpresa = empresaRepository.save(empresaRecebida);
                     recrutador.setEmpresa(novaEmpresa);
                 }
@@ -59,7 +59,7 @@ public class RecrutadorService {
                 throw new IllegalArgumentException("Dados da empresa inválidos (CNPJ ou ID obrigatórios).");
             }
         } else {
-             throw new IllegalArgumentException("É obrigatório informar os dados da empresa.");
+            throw new IllegalArgumentException("É obrigatório informar os dados da empresa.");
         }
 
         if (isNovoCadastro) {
@@ -81,9 +81,9 @@ public class RecrutadorService {
             if (recrutadorComTelefone.isPresent() && !recrutadorComTelefone.get().getId().equals(recrutador.getId())) {
                 throw new IllegalArgumentException("Esse telefone já está em uso por outro recrutador");
             }
-            
-             String senhaCriptografada = bCryptPasswordEncoder.encode(recrutador.getSenha());
-             recrutador.setSenha(senhaCriptografada);
+
+            String senhaCriptografada = bCryptPasswordEncoder.encode(recrutador.getSenha());
+            recrutador.setSenha(senhaCriptografada);
         }
 
         Recrutador salvo = recrutadorRepository.save(recrutador);

@@ -19,7 +19,9 @@ public class CandidaturaController {
     private final CandidaturaService candidaturaService;
 
     @GetMapping
-    public List<Candidatura> getAll() {return candidaturaService.getAll();}
+    public List<Candidatura> getAll() {
+        return candidaturaService.getAll();
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Candidatura> getById(@PathVariable Long id) {

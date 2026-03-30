@@ -21,7 +21,9 @@ public class CandidaturaService {
     private final VagaRepository vagaRepository;
     private final CandidatoRepository candidatoRepository;
 
-    public List<Candidatura> getAll() { return candidaturaRepository.findAll();}
+    public List<Candidatura> getAll() {
+        return candidaturaRepository.findAll();
+    }
 
     public Candidatura candidatura(Candidatura candidatura) {
         return candidaturaRepository.save(candidatura);
@@ -54,7 +56,10 @@ public class CandidaturaService {
         return candidaturaRepository.save(candidatura);
     }
 
-    public void delete(Long id) { candidaturaRepository.deleteById(id);}
+    public void delete(Long id) {
+        candidaturaRepository.deleteById(id);
+    }
+
     public Optional<Candidatura> findById(Long id) {
         return candidaturaRepository.findById(id);
     }

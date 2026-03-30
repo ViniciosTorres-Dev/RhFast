@@ -1,60 +1,64 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="utf-8"/>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-  <title>RH Fast - Perfil do Candidato</title>
-  <link rel="icon" href="images/icons/favicon.ico" type="image/x-icon">
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="fonts/iconic/css/material-design-iconic-font.min.css" rel="stylesheet" type="text/css"/>
-  <link href="css/mainRecrutador.css" rel="stylesheet"/>
-  <style>
-    .profile-card { background: rgba(0, 0, 0, 0.2); border-radius: 15px; padding: 30px; margin-top: 20px; }
-    .profile-avatar { width: 150px; height: 150px; border-radius: 50%; border: 4px solid #14b6ff; }
-    .section-title { font-weight: 500; color: #14b6ff; margin-bottom: 15px; margin-top: 30px; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
-  </style>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+    <title>RH Fast - Perfil do Candidato</title>
+    <link href="images/icons/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="fonts/iconic/css/material-design-iconic-font.min.css" rel="stylesheet" type="text/css"/>
+    <link href="css/mainRecrutador.css" rel="stylesheet"/>
+    <style>
+        .profile-card { background: rgba(0, 0, 0, 0.2); border-radius: 15px; padding: 30px; margin-top: 20px; }
+        .profile-avatar { width: 150px; height: 150px; border-radius: 50%; border: 4px solid #14b6ff; }
+        .section-title { font-weight: 500; color: #14b6ff; margin-bottom: 15px; margin-top: 30px; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
+    </style>
 </head>
 <body class="bg-theme bg-theme1">
 
 <nav class="navbar navbar-expand-lg fixed-top">
-  <div class="container-fluid">
-    <a class="navbar-brand text-white" href="mainRecrutador.html"><i class="zmdi zmdi-fire mr-2"></i>RH Fast</a>
-  </div>
+    <div class="container-fluid">
+        <a class="navbar-brand text-white" href="mainRecrutador.html"><i class="zmdi zmdi-fire mr-2"></i>RH Fast</a>
+    </div>
 </nav>
 
 <div class="clearfix"></div>
 
 <div class="content-wrapper" style="margin-left: 0; padding-top: 90px;">
-  <div class="container-fluid">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <button class="btn btn-secondary mb-3" onclick="window.history.back()"><i class="zmdi zmdi-arrow-left"></i> Voltar</button>
-        <div class="profile-card">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <button class="btn btn-secondary mb-3" onclick="window.history.back()"><i
+                        class="zmdi zmdi-arrow-left"></i> Voltar
+                </button>
+                <div class="profile-card">
 
-            <div class="d-flex align-items-center mb-4">
-                <img src="https://placehold.co/150x150" class="profile-avatar mr-4" alt="Avatar do Candidato">
-                <div>
-                    <h3 class="text-white mb-1" id="nomeCandidato">Carregando...</h3>
-                    <p class="text-info mb-0" id="emailCandidato">...</p>
-                </div>
-            </div>
+                    <div class="d-flex align-items-center mb-4">
+                        <img alt="Avatar do Candidato" class="profile-avatar mr-4" src="https://placehold.co/150x150">
+                        <div>
+                            <h3 class="text-white mb-1" id="nomeCandidato">Carregando...</h3>
+                            <p class="text-info mb-0" id="emailCandidato">...</p>
+                        </div>
+                    </div>
 
-            <hr class="border-light">
-            <div id="info-candidato">
-                <h5 class="section-title">Informações de Contato</h5>
-                <p class="text-white-50"><i class="zmdi zmdi-phone mr-2"></i><span id="telefoneCandidato">...</span></p>
-                <p class="text-white-50"><i class="zmdi zmdi-pin mr-2"></i><span id="localCandidato">...</span></p>
+                    <hr class="border-light">
+                    <div id="info-candidato">
+                        <h5 class="section-title">Informações de Contato</h5>
+                        <p class="text-white-50"><i class="zmdi zmdi-phone mr-2"></i><span
+                                id="telefoneCandidato">...</span></p>
+                        <p class="text-white-50"><i class="zmdi zmdi-pin mr-2"></i><span id="localCandidato">...</span>
+                        </p>
 
-                <h5 class="section-title">Currículos</h5>
-                <div id="curriculosContainer">
-                    <p class="text-muted">Carregando currículos...</p>
+                        <h5 class="section-title">Currículos</h5>
+                        <div id="curriculosContainer">
+                            <p class="text-muted">Carregando currículos...</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 
 <script src="vendor/jquery/jquery-3.2.1.min.js"></script>

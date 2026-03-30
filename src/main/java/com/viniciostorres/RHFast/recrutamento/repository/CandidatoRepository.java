@@ -13,13 +13,16 @@ import java.util.Optional;
 public interface CandidatoRepository extends JpaRepository<Candidato, Long> {
 
     Optional<Candidato> findByEmail(String email);
+
     Optional<Candidato> findByNumeroTelefone(String numeroTelefone);
+
     boolean existsByEmail(String email);
+
     boolean existsByNumeroTelefone(String numeroTelefone);
 
     @Query("SELECT c FROM Candidato c WHERE " +
-           "lower(c.nome) LIKE lower(concat('%', :query, '%')) OR " +
-           "lower(c.sobrenome) LIKE lower(concat('%', :query, '%')) OR " +
-           "lower(concat(c.nome, ' ', c.sobrenome)) LIKE lower(concat('%', :query, '%'))")
+            "lower(c.nome) LIKE lower(concat('%', :query, '%')) OR " +
+            "lower(c.sobrenome) LIKE lower(concat('%', :query, '%')) OR " +
+            "lower(concat(c.nome, ' ', c.sobrenome)) LIKE lower(concat('%', :query, '%'))")
     List<Candidato> searchByNome(@Param("query") String query);
 }

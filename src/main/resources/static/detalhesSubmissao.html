@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+    <title>RH Fast - Detalhes da Submissão</title>
+
+    <link href="images/icons/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="fonts/iconic/css/material-design-iconic-font.min.css" rel="stylesheet" type="text/css"/>
+    <link href="css/mainRecrutador.css" rel="stylesheet"/>
+    <style>
+        .opcao-label {
+            display: block;
+            padding: 8px 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            margin-bottom: 5px;
+        }
+        .bg-correct {
+            background-color: rgba(40, 167, 69, 0.2) !important; /* Verde translúcido */
+            border-color: #28a745 !important;
+        }
+        .bg-incorrect {
+            background-color: rgba(220, 53, 69, 0.2) !important; /* Vermelho translúcido */
+            border-color: #dc3545 !important;
+        }
+        .bg-missed {
+            background-color: rgba(255, 193, 7, 0.1) !important; /* Amarelo translúcido */
+            border-color: #ffc107 !important;
+            border-style: dashed;
+        }
+    </style>
+</head>
+
+<body class="bg-theme bg-theme1">
+
+<nav class="navbar navbar-expand-lg fixed-top">
+    <!-- (Navbar igual às outras telas) -->
+    <div class="container-fluid">
+        <a class="navbar-brand text-white" href="mainRecrutador.html"><i class="zmdi zmdi-fire mr-2"></i>RH Fast</a>
+    </div>
+</nav>
+
+<div class="clearfix"></div>
+
+<div class="content-wrapper" style="margin-left: 0; padding-top: 90px;">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <button class="btn btn-secondary mb-3" onclick="window.history.back()"><i
+                        class="zmdi zmdi-arrow-left"></i> Voltar aos Resultados
+                </button>
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong id="nomeCandidato"></strong>
+                            <br><small class="text-muted" id="dataSubmissao"></small>
+                        </div>
+                        <div class="text-right">
+                            <h4 class="mb-0 text-white" id="pontuacaoFinal"></h4>
+                            <small class="text-white-50">Pontuação</small>
+                        </div>
+                    </div>
+                    <div class="card-body" id="containerRespostas">
+                        <!-- Respostas renderizadas via JS -->
+                        <p class="text-center text-muted">Carregando respostas...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="vendor/bootstrap/js/popper.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/logout.js"></script>
+<script src="js/detalhesSubmissao.js"></script>
+
+</body>
+</html>

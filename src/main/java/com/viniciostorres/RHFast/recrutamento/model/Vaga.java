@@ -38,16 +38,16 @@ public class Vaga {
     private String cidade;
     @NotBlank
     private String cep;
-    
+
     private LocalDate dataPostagem;
-    
+
     @Enumerated(EnumType.STRING)
     private StatusVaga status;
 
     @NotNull
     @Enumerated(EnumType.STRING)
     private NivelExperiencia nivelExperiencia;
-    
+
     @ManyToOne
     @JoinColumn(name = "empresa_id")
     private Empresa empresa;
@@ -70,9 +70,9 @@ public class Vaga {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-        name = "vaga_testes",
-        joinColumns = @JoinColumn(name = "vaga_id"),
-        inverseJoinColumns = @JoinColumn(name = "teste_id")
+            name = "vaga_testes",
+            joinColumns = @JoinColumn(name = "vaga_id"),
+            inverseJoinColumns = @JoinColumn(name = "teste_id")
     )
     @JsonIgnoreProperties("vagas")
     private List<Teste> testes;
