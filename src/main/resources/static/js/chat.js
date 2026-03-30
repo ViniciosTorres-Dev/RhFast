@@ -1,11 +1,21 @@
+const API_BASE_URL = 'http://localhost:8080/api';
 let currentDestinatarioId = null;
 let currentDestinatarioTipo = null;
 let currentRemetenteId = null;
 let currentRemetenteTipo = null;
 let pollingInterval = null;
+let searchTimeout = null;
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Identificar usuário logado
+document.addEventListener('DOMContentLoaded', async function() {
+    const isLogged = await setupUser();
+    if (isLogged) {
+        carregarContatos();
+        setupEventListeners();
+        handleInitialState();
+    }
+});
+
+async function setupUser() {
     currentRemetenteId = localStorage.getItem('recrutadorId');
     currentRemetenteTipo = 'RECRUTADOR';
 
@@ -16,24 +26,71 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (!currentRemetenteId) {
         window.location.href = 'index.html';
-        return;
+        return false;
     }
 
-    // Configurar navegação
-    const navBrand = document.getElementById('navBrand');
-    const navDashboard = document.getElementById('navDashboard');
-    if (currentRemetenteTipo === 'RECRUTADOR') {
-        navBrand.href = 'mainRecrutador.html';
-        navDashboard.href = 'mainRecrutador.html';
-    } else {
-        navBrand.href = 'mainCandidato.html';
-        navDashboard.href = 'mainCandidato.html';
+    try {
+        let endpoint = currentRemetenteTipo === 'RECRUTADOR' ? 'recrutadores' : 'candidatos';
+        const res = await fetch(`${API_BASE_URL}/${endpoint}/${currentRemetenteId}`, {
+            headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+        });
+
+        if (!res.ok) {
+            alert("Sua sessão expirou ou o usuário foi removido.");
+            localStorage.clear();
+            window.location.href = 'index.html';
+            return false;
+        }
+    } catch (e) {
+        console.error("Erro ao verificar sessão:", e);
+        return false;
     }
 
-    // Carregar lista de contatos
-    carregarContatos();
+    const isRecrutador = currentRemetenteTipo === 'RECRUTADOR';
+    document.getElementById('homeLink').href = isRecrutador ? 'mainRecrutador.html' : 'mainCandidato.html';
+    const dashboardLink = document.getElementById('dashboardLink');
+    if(dashboardLink) dashboardLink.href = isRecrutador ? 'mainRecrutador.html' : 'mainCandidato.html';
+    const dashboardNav = document.getElementById('dashboardNav');
+    if(dashboardNav) dashboardNav.style.display = isRecrutador ? 'block' : 'none';
+    const vagasNav = document.getElementById('vagasNav');
+    if(vagasNav) vagasNav.style.display = isRecrutador ? 'none' : 'block';
+    const candidaturasNav = document.getElementById('candidaturasNav');
+    if(candidaturasNav) candidaturasNav.style.display = isRecrutador ? 'none' : 'block';
+    const configuracoesLink2 = document.getElementById('configuracoesLink2');
+    if(configuracoesLink2) configuracoesLink2.href = isRecrutador ? 'configuracoesRecrutador.html' : 'configuracoesCandidato.html';
+    const perfilLink = document.getElementById('perfilLink');
+    if(perfilLink) perfilLink.href = isRecrutador ? 'perfilRecrutador.html' : 'perfilCandidato.html';
 
-    // Verificar se veio de um link externo com destinatário pré-selecionado
+    return true;
+}
+
+function setupEventListeners() {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('keyup', (e) => {
+            clearTimeout(searchTimeout);
+            const query = e.target.value.trim();
+            if (query.length >= 2) {
+                searchTimeout = setTimeout(() => searchUsers(query), 300);
+            } else {
+                document.getElementById('searchResults').style.display = 'none';
+                document.getElementById('contactList').style.display = 'block';
+                if (query.length === 0) document.getElementById('searchResults').innerHTML = '';
+            }
+        });
+    }
+
+    document.getElementById('chatForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        enviarMensagem();
+    });
+
+    document.getElementById('btnBackToContacts').addEventListener('click', () => {
+        document.getElementById('chatSidebar').style.transform = 'translateX(0)';
+    });
+}
+
+function handleInitialState() {
     const urlParams = new URLSearchParams(window.location.search);
     const destId = urlParams.get('destinatarioId');
     const destTipo = urlParams.get('destinatarioTipo');
@@ -41,110 +98,294 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (destId && destTipo) {
         const nomeExibicao = destNome || `Usuário #${destId}`;
-        selecionarContato(destId, destTipo, nomeExibicao);
+        startNewChat(destId, destTipo, nomeExibicao);
+    }
+}
+
+function searchUsers(query) {
+    const url = `${API_BASE_URL}/users/search?query=${encodeURIComponent(query)}`;
+    fetch(url, { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }})
+        .then(response => response.json())
+        .then(users => {
+            document.getElementById('contactList').style.display = 'none';
+            const searchResults = document.getElementById('searchResults');
+            searchResults.style.display = 'block';
+            displaySearchResults(users);
+        })
+        .catch(error => console.error('Erro ao buscar usuários:', error));
+}
+
+function displaySearchResults(users) {
+    const resultsContainer = document.getElementById('searchResults');
+    resultsContainer.innerHTML = '';
+
+    if (users.length === 0) {
+        resultsContainer.innerHTML = '<li class="p-3 text-center text-muted">Nenhum usuário encontrado.</li>';
+        return;
     }
 
-    // Enviar mensagem ao pressionar Enter
-    document.getElementById('messageInput').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            enviarMensagem();
+    users.forEach(user => {
+        if (user.id == currentRemetenteId && user.tipo === currentRemetenteTipo) return;
+
+        const avatarLetter = user.nome ? user.nome.charAt(0).toUpperCase() : '?';
+        const subtext = user.tipo === 'RECRUTADOR' ? user.empresa || 'Recrutador' : 'Candidato';
+
+        const item = `
+            <li onclick="startNewChat(${user.id}, '${user.tipo}', '${user.nome}')">
+                <div class="avatar-placeholder">${avatarLetter}</div>
+                <div class="contact-details">
+                    <h6 class="contact-name">${user.nome}</h6>
+                    <p class="contact-last-message">${subtext}</p>
+                </div>
+            </li>
+        `;
+        resultsContainer.insertAdjacentHTML('beforeend', item);
+    });
+}
+
+function startNewChat(userId, userType, userName) {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('searchResults').style.display = 'none';
+    document.getElementById('contactList').style.display = 'block';
+
+    let contactExists = false;
+    document.querySelectorAll('#contactList li').forEach(item => {
+        if (item.getAttribute('data-user-id') == userId) {
+            contactExists = true;
         }
     });
 
-    // Ao abrir o modal de busca, carregar todos os usuários
-    $('#searchModal').on('show.bs.modal', function () {
-        buscarUsuarios(''); // Busca vazia carrega todos
-    });
-});
+    if (!contactExists) {
+        renderContact({ id: userId, tipo: userType, nome: userName, empresa: '', mensagensNaoLidas: 0 }, false, true);
+    }
+
+    selecionarContato(userId, userType, userName);
+}
 
 function carregarContatos() {
-    fetch(`http://localhost:8080/api/mensagens/contatos?usuarioId=${currentRemetenteId}&usuarioTipo=${currentRemetenteTipo}`)
+    const url = `${API_BASE_URL}/mensagens/contatos?usuarioId=${currentRemetenteId}&usuarioTipo=${currentRemetenteTipo}`;
+    fetch(url, { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }})
         .then(response => response.json())
         .then(contatos => {
-            const contactsList = document.getElementById('contactsList');
+            const contactsList = document.getElementById('contactList');
             contactsList.innerHTML = '';
 
             if (contatos.length === 0) {
-                contactsList.innerHTML = '<div class="p-3 text-center text-muted">Nenhum contato recente.</div>';
+                contactsList.innerHTML = '<li class="p-3 text-center text-muted">Nenhum contato recente.</li>';
                 return;
             }
-
-            contatos.forEach(contato => {
-                const avatarLetter = contato.nome ? contato.nome.charAt(0).toUpperCase() : '?';
-                const isActive = (contato.id == currentDestinatarioId && contato.tipo == currentDestinatarioTipo) ? 'active' : '';
-
-                const item = `
-                    <div class="contact-item ${isActive}" onclick="selecionarContato(${contato.id}, '${contato.tipo}', '${contato.nome}')">
-                        <div class="contact-avatar bg-secondary">${avatarLetter}</div>
-                        <div>
-                            <h6 class="mb-0">${contato.nome}</h6>
-                            <small class="text-muted">${contato.tipo === 'RECRUTADOR' ? 'Recrutador' : 'Candidato'}</small>
-                        </div>
-                    </div>
-                `;
-                contactsList.insertAdjacentHTML('beforeend', item);
-            });
+            contatos.forEach(contato => renderContact(contato, false));
         })
         .catch(error => console.error('Erro ao carregar contatos:', error));
 }
 
+function renderContact(contato, prepend = false, isActive = false) {
+    const contactsList = document.getElementById('contactList');
+
+    const isDeleted = !contato.nome;
+    const displayName = isDeleted ? "Usuário não encontrado" : contato.nome;
+    const avatarLetter = isDeleted ? '?' : contato.nome.charAt(0).toUpperCase();
+    const subtext = isDeleted ? 'Conta removida' : (contato.tipo === 'RECRUTADOR' ? contato.empresa || 'Recrutador' : 'Candidato');
+    const unreadBadge = contato.mensagensNaoLidas > 0 ? `<span class="unread-badge">${contato.mensagensNaoLidas}</span>` : '';
+
+    const item = document.createElement('li');
+    item.setAttribute('data-user-id', contato.id);
+    item.setAttribute('data-user-type', contato.tipo);
+    if (isActive) item.classList.add('active');
+    if (isDeleted) item.style.opacity = 0.5;
+
+    item.innerHTML = `
+        <div class="avatar-placeholder">${avatarLetter}</div>
+        <div class="contact-details">
+            <h6 class="contact-name">${displayName}</h6>
+            <p class="contact-last-message">${subtext}</p>
+        </div>
+        ${unreadBadge}
+    `;
+
+    if (isDeleted) {
+        item.onclick = () => selecionarContatoInvalido();
+    } else {
+        item.onclick = () => selecionarContato(contato.id, contato.tipo, contato.nome);
+    }
+
+    if (prepend) {
+        contactsList.prepend(item);
+    } else {
+        contactsList.appendChild(item);
+    }
+}
+
+function selecionarContatoInvalido() {
+    if (pollingInterval) clearInterval(pollingInterval);
+
+    document.getElementById('chatHeaderName').innerHTML = "Usuário não encontrado";
+    document.getElementById('chatHeaderAvatar').textContent = '?';
+    document.getElementById('chatHeaderStatus').textContent = "Offline";
+
+    document.getElementById('messageInput').disabled = true;
+    document.getElementById('btnSendMessage').disabled = true;
+    document.getElementById('btnDeleteConversation').classList.add('d-none');
+
+    const chatBody = document.getElementById('chatMessages');
+    chatBody.innerHTML = '<div class="chat-start"><p>Este usuário não existe mais e não pode receber novas mensagens.</p></div>';
+
+    if (window.innerWidth < 768) {
+        document.getElementById('chatSidebar').style.transform = 'translateX(-100%)';
+    }
+
+    document.querySelectorAll('#contactList li').forEach(item => item.classList.remove('active'));
+}
+
 function selecionarContato(id, tipo, nome) {
+    marcarConversaComoLida(id, tipo);
+
     currentDestinatarioId = id;
     currentDestinatarioTipo = tipo;
 
-    // Atualizar UI
-    document.getElementById('headerName').textContent = nome;
-    document.getElementById('headerAvatar').textContent = nome.charAt(0).toUpperCase();
-    document.getElementById('chatHeader').style.display = 'flex';
-    document.getElementById('chatInputArea').style.display = 'flex';
+    // Transforma o nome no cabeçalho em um link para o perfil público
+    const linkPerfil = tipo === 'RECRUTADOR'
+        ? `perfilPublicoRecrutador.html?id=${id}`
+        : `perfilPublicoCandidato.html?id=${id}`;
 
-    // Atualizar destaque na lista de contatos
-    const itens = document.querySelectorAll('.contact-item');
-    itens.forEach(item => item.classList.remove('active'));
+    // Link ajustado para não ter sublinhado
+    document.getElementById('chatHeaderName').innerHTML = `<a href="${linkPerfil}" class="text-white" title="Ver Perfil de ${nome}" style="text-decoration: none;">${nome}</a>`;
+    document.getElementById('chatHeaderAvatar').textContent = nome ? nome.charAt(0).toUpperCase() : '?';
+    document.getElementById('chatHeaderStatus').textContent = "Online";
 
-    // Carregar mensagens imediatamente
+    document.getElementById('messageInput').disabled = false;
+    document.getElementById('btnSendMessage').disabled = false;
+    document.getElementById('btnDeleteConversation').classList.remove('d-none');
+
+    if (window.innerWidth < 768) {
+        document.getElementById('chatSidebar').style.transform = 'translateX(-100%)';
+    }
+
+    document.querySelectorAll('#contactList li').forEach(item => item.classList.remove('active'));
+    const selectedItem = document.querySelector(`#contactList li[data-user-id='${id}']`);
+    if (selectedItem) {
+        selectedItem.classList.add('active');
+        const badge = selectedItem.querySelector('.unread-badge');
+        if (badge) badge.remove();
+    }
+
     carregarMensagens();
-
-    // Configurar polling
     if (pollingInterval) clearInterval(pollingInterval);
-    pollingInterval = setInterval(carregarMensagens, 3000);
+    pollingInterval = setInterval(carregarMensagens, 5000);
+}
+
+function marcarConversaComoLida(outroUsuarioId, outroUsuarioTipo) {
+    const payload = {
+        usuarioLogadoId: currentRemetenteId,
+        usuarioLogadoTipo: currentRemetenteTipo,
+        outroUsuarioId: outroUsuarioId,
+        outroUsuarioTipo: outroUsuarioTipo
+    };
+
+    fetch(`${API_BASE_URL}/mensagens/marcar-como-lida`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
+        body: JSON.stringify(payload)
+    }).catch(error => console.error('Erro ao marcar mensagens como lidas:', error));
 }
 
 function carregarMensagens() {
     if (!currentDestinatarioId) return;
 
-    const url = `http://localhost:8080/api/mensagens/conversa?usuario1Id=${currentRemetenteId}&usuario1Tipo=${currentRemetenteTipo}&usuario2Id=${currentDestinatarioId}&usuario2Tipo=${currentDestinatarioTipo}`;
-
-    fetch(url)
+    const url = `${API_BASE_URL}/mensagens/conversa?usuario1Id=${currentRemetenteId}&usuario1Tipo=${currentRemetenteTipo}&usuario2Id=${currentDestinatarioId}&usuario2Tipo=${currentDestinatarioTipo}`;
+    fetch(url, { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }})
         .then(response => response.json())
         .then(mensagens => {
-            const chatMessages = document.getElementById('chatMessages');
-
-            // Lógica simples de atualização: limpa e redesenha.
-            chatMessages.innerHTML = '';
+            const chatBody = document.getElementById('chatMessages');
+            chatBody.innerHTML = '';
 
             if (mensagens.length === 0) {
-                chatMessages.innerHTML = '<div class="text-center text-muted mt-5">Nenhuma mensagem ainda. Diga olá!</div>';
+                chatBody.innerHTML = '<div class="chat-start"><p>Nenhuma mensagem ainda. Seja o primeiro a falar!</p></div>';
                 return;
             }
 
             mensagens.forEach(msg => {
                 const isSent = (msg.remetenteId == currentRemetenteId && msg.remetenteTipo === currentRemetenteTipo);
-                const messageClass = isSent ? 'sent' : 'received';
+                const messageClass = isSent ? 'message-right' : 'message-left';
                 const time = new Date(msg.dataEnvio).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
                 const html = `
-                    <div class="message ${messageClass}">
-                        ${msg.conteudo}
-                        <div class="message-time">${time}</div>
+                    <div class="chat-message ${messageClass}" id="msg-${msg.id}">
+                        <div class="message-content">
+                            ${msg.conteudo}
+                            <div class="message-time">
+                                ${time}
+                                <i class="zmdi zmdi-delete delete-msg-icon ml-2" onclick="apagarMensagem(${msg.id})" title="Apagar para mim" style="cursor: pointer; opacity: 0.7;"></i>
+                            </div>
+                        </div>
                     </div>
                 `;
-                chatMessages.insertAdjacentHTML('beforeend', html);
+                chatBody.insertAdjacentHTML('beforeend', html);
             });
-
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            chatBody.scrollTop = chatBody.scrollHeight;
         })
         .catch(error => console.error('Erro ao carregar mensagens:', error));
+}
+
+function apagarMensagem(mensagemId) {
+    if (!confirm('Tem certeza que deseja apagar esta mensagem para você? Ela continuará visível para a outra pessoa.')) {
+        return;
+    }
+
+    const payload = {
+        usuarioLogadoId: currentRemetenteId,
+        usuarioLogadoTipo: currentRemetenteTipo
+    };
+
+    fetch(`${API_BASE_URL}/mensagens/${mensagemId}/apagar-para-mim`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
+        body: JSON.stringify(payload)
+    })
+    .then(response => {
+        if (response.ok) {
+            const msgElement = document.getElementById(`msg-${mensagemId}`);
+            if (msgElement) {
+                msgElement.remove();
+            }
+        } else {
+            alert('Erro ao tentar apagar a mensagem.');
+        }
+    })
+    .catch(error => console.error('Erro ao apagar mensagem:', error));
+}
+
+function apagarConversa() {
+    if (!currentDestinatarioId) return;
+
+    if (!confirm('Tem certeza que deseja apagar a conversa inteira para você? Isso não apagará as mensagens para o outro participante.')) {
+        return;
+    }
+
+    const payload = {
+        usuarioLogadoId: currentRemetenteId,
+        usuarioLogadoTipo: currentRemetenteTipo,
+        outroUsuarioId: currentDestinatarioId,
+        outroUsuarioTipo: currentDestinatarioTipo
+    };
+
+    fetch(`${API_BASE_URL}/mensagens/conversa/apagar-para-mim`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
+        body: JSON.stringify(payload)
+    })
+    .then(response => {
+        if (response.ok) {
+            document.getElementById('chatMessages').innerHTML = '<div class="chat-start"><p>Conversa apagada.</p></div>';
+            document.getElementById('btnDeleteConversation').classList.add('d-none');
+            currentDestinatarioId = null;
+            currentDestinatarioTipo = null;
+            carregarContatos();
+        } else {
+            alert('Erro ao tentar apagar a conversa.');
+        }
+    })
+    .catch(error => console.error('Erro ao apagar conversa:', error));
 }
 
 function enviarMensagem() {
@@ -160,11 +401,9 @@ function enviarMensagem() {
         conteudo: conteudo
     };
 
-    fetch('http://localhost:8080/api/mensagens', {
+    fetch(`${API_BASE_URL}/mensagens`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
         body: JSON.stringify(mensagem)
     })
     .then(response => {
@@ -172,61 +411,9 @@ function enviarMensagem() {
             input.value = '';
             carregarMensagens();
             carregarContatos();
+        } else {
+            console.error("Falha ao enviar mensagem.");
         }
     })
-    .catch(error => console.error('Erro:', error));
-}
-
-function buscarUsuarios(termo = '') {
-    // Determina onde buscar baseado em quem está logado
-    // Se sou recrutador, busco candidatos. Se sou candidato, busco recrutadores.
-    const endpoint = currentRemetenteTipo === 'RECRUTADOR'
-        ? 'http://localhost:8080/api/candidatos'
-        : 'http://localhost:8080/api/recrutadores';
-
-    const tipoDestino = currentRemetenteTipo === 'RECRUTADOR' ? 'CANDIDATO' : 'RECRUTADOR';
-
-    fetch(endpoint)
-        .then(response => {
-            if(!response.ok) throw new Error("Erro ao buscar usuários");
-            return response.json();
-        })
-        .then(usuarios => {
-            const resultados = document.getElementById('searchResults');
-            resultados.innerHTML = '';
-
-            // Filtrar: remove o próprio usuário (embora improvável se endpoints forem diferentes) e aplica o termo de busca
-            const filtrados = usuarios.filter(u => {
-                const isSelf = (u.id == currentRemetenteId && currentRemetenteTipo === tipoDestino); // Check redundante mas seguro
-                if (isSelf) return false;
-
-                const nomeCompleto = `${u.nome} ${u.sobrenome}`.toLowerCase();
-                return nomeCompleto.includes(termo.toLowerCase());
-            });
-
-            if(filtrados.length === 0) {
-                resultados.innerHTML = '<p class="text-muted text-center mt-3">Nenhum usuário encontrado.</p>';
-                return;
-            }
-
-            filtrados.forEach(u => {
-                const nomeCompleto = `${u.nome} ${u.sobrenome}`;
-                const item = `
-                    <div class="search-item">
-                        <span>${nomeCompleto}</span>
-                        <button class="btn btn-sm btn-primary" onclick="iniciarConversa(${u.id}, '${tipoDestino}', '${nomeCompleto}')">Conversar</button>
-                    </div>
-                `;
-                resultados.insertAdjacentHTML('beforeend', item);
-            });
-        })
-        .catch(err => {
-            console.error(err);
-            document.getElementById('searchResults').innerHTML = '<p class="text-danger text-center">Erro ao buscar usuários.</p>';
-        });
-}
-
-function iniciarConversa(id, tipo, nome) {
-    $('#searchModal').modal('hide');
-    selecionarContato(id, tipo, nome);
+    .catch(error => console.error('Erro ao enviar mensagem:', error));
 }

@@ -1,7 +1,10 @@
 package com.viniciostorres.RHFast.recrutamento.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -47,6 +50,7 @@ public class Recrutador {
 
     @NotBlank
     @Size(min = 8, message = "A senha deve ter no mínimo 8 caracteres")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // Permite receber a senha, mas não devolve pro frontend
     private String senha;
 
     @PrePersist

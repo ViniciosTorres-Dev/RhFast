@@ -31,34 +31,36 @@ public class CandidatoService {
         candidato.setCpf(cpfLimpo);
 
         if (isNovoCadastro) {
-            if (candidatoRepository.existsByEmail(candidato.getEmail())) {
+            if (candidatoRepository.existsByEmail(candidato.getEmail()) || recrutadorRepository.existsByEmail(candidato.getEmail())) {
                 throw new IllegalArgumentException("Esse E-mail já está cadastrado");
             }
-            if (candidatoRepository.existsByNumeroTelefone(telefoneLimpo)) {
-                throw new IllegalArgumentException("Esse número de telefone já está cadastrado");
-            }
-            if (recrutadorRepository.existsByEmail(candidato.getEmail())) {
-                throw new IllegalArgumentException("Esse E-mail já está cadastrado");
-            }
-            if (recrutadorRepository.existsByNumeroTelefone(telefoneLimpo)) {
+            if (candidatoRepository.existsByNumeroTelefone(telefoneLimpo) || recrutadorRepository.existsByNumeroTelefone(telefoneLimpo)) {
                 throw new IllegalArgumentException("Esse número de telefone já está cadastrado");
             }
             String senhaCriptografada = bCryptPasswordEncoder.encode(candidato.getSenha());
             candidato.setSenha(senhaCriptografada);
         } else {
-            Optional<Candidato> candidatoComEmail = candidatoRepository.findByEmail(candidato.getEmail());
-            if (candidatoComEmail.isPresent() && !candidatoComEmail.get().getId().equals(candidato.getId())) {
-                throw new IllegalArgumentException("Esse E-mail já está cadastrado");
+            Candidato existingCandidato = candidatoRepository.findById(candidato.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Candidato não encontrado para atualização."));
+
+            if (!existingCandidato.getEmail().equals(candidato.getEmail())) {
+                if (candidatoRepository.existsByEmail(candidato.getEmail()) || recrutadorRepository.existsByEmail(candidato.getEmail())) {
+                    throw new IllegalArgumentException("Esse E-mail já está cadastrado");
+                }
             }
 
-            Optional<Candidato> candidatoComTelefone = candidatoRepository.findByNumeroTelefone(telefoneLimpo);
-            if (candidatoComTelefone.isPresent() && !candidatoComTelefone.get().getId().equals(candidato.getId())) {
-                throw new IllegalArgumentException("Esse número de telefone já está cadastrado");
+            if (!existingCandidato.getNumeroTelefone().equals(telefoneLimpo)) {
+                 if (candidatoRepository.existsByNumeroTelefone(telefoneLimpo) || recrutadorRepository.existsByNumeroTelefone(telefoneLimpo)) {
+                    throw new IllegalArgumentException("Esse número de telefone já está cadastrado");
+                }
             }
-            
-            // Mesma lógica do RecrutadorService para senha
-             String senhaCriptografada = bCryptPasswordEncoder.encode(candidato.getSenha());
-             candidato.setSenha(senhaCriptografada);
+
+            if (candidato.getSenha() != null && !candidato.getSenha().isEmpty()) {
+                String senhaCriptografada = bCryptPasswordEncoder.encode(candidato.getSenha());
+                candidato.setSenha(senhaCriptografada);
+            } else {
+                candidato.setSenha(existingCandidato.getSenha());
+            }
         }
 
         Candidato salvo = candidatoRepository.save(candidato);

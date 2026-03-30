@@ -1,5 +1,7 @@
 package com.viniciostorres.RHFast.recrutamento.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -59,6 +61,7 @@ public class Candidato {
 
     @NotBlank
     @Size(min = 8, message = "A senha deve ter no mínimo 8 caracteres")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // Permite receber a senha no cadastro/login, mas nunca envia de volta ao frontend
     private String senha;
 
     @PrePersist
@@ -76,6 +79,11 @@ public class Candidato {
         }
     }
 
+    // Removido o @JsonIgnore para que os recrutadores possam ver os currículos no perfil
     @OneToMany(mappedBy = "candidato", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Curriculo> curriculos;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "candidato")
+    private List<Candidatura> candidaturas;
 }

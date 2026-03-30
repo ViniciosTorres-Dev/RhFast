@@ -12,7 +12,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/recrutadores")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class RecrutadorController {
 
     private final RecrutadorService recrutadorService;

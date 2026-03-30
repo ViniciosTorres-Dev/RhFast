@@ -1,6 +1,8 @@
 package com.viniciostorres.RHFast.recrutamento.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.viniciostorres.RHFast.avaliacoes.model.Teste;
 import com.viniciostorres.RHFast.recrutamento.model.enums.Modalidade;
 import com.viniciostorres.RHFast.recrutamento.model.enums.NivelExperiencia;
 import com.viniciostorres.RHFast.recrutamento.model.enums.StatusVaga;
@@ -65,6 +67,15 @@ public class Vaga {
     @OneToMany(mappedBy = "vaga", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Candidatura> candidaturas;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "vaga_testes",
+        joinColumns = @JoinColumn(name = "vaga_id"),
+        inverseJoinColumns = @JoinColumn(name = "teste_id")
+    )
+    @JsonIgnoreProperties("vagas")
+    private List<Teste> testes;
 
     @PrePersist
     private void preCreate() {

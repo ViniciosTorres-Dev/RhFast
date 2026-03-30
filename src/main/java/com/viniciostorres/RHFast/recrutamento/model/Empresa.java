@@ -5,8 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.validator.constraints.br.CNPJ;
 
-import java.util.List;
-
 @Entity
 @Table(name = "empresas")
 @Getter

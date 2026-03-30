@@ -1,6 +1,5 @@
 package com.viniciostorres.RHFast.recrutamento.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.viniciostorres.RHFast.recrutamento.model.enums.StatusCandidatura;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

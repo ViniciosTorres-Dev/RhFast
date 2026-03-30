@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+  <title>RH Fast - Processo de Admissão</title>
+
+  <link rel="icon" href="images/icons/favicon.ico" type="image/x-icon">
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="fonts/iconic/css/material-design-iconic-font.min.css" rel="stylesheet" type="text/css"/>
+  <link href="css/mainCandidato.css" rel="stylesheet"/>
+  <style>
+      .doc-card {
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 8px;
+          padding: 15px;
+          margin-bottom: 15px;
+      }
+      .status-pendente { color: #ffc107; }
+      .status-enviado { color: #17a2b8; }
+      .status-aprovado { color: #28a745; }
+      .status-rejeitado { color: #dc3545; }
+  </style>
+</head>
+
+<body class="bg-theme bg-theme1">
+
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand text-white" href="mainCandidato.html"><i class="zmdi zmdi-fire mr-2"></i>RH Fast</a>
+  </div>
+</nav>
+
+<div class="clearfix"></div>
+
+<div class="content-wrapper" style="margin-left: 0; padding-top: 90px;">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-md-9">
+        <button class="btn btn-secondary mb-3" onclick="window.history.back()"><i class="zmdi zmdi-arrow-left"></i> Voltar</button>
+
+        <div class="card">
+            <div class="card-header text-white">
+                Meu Processo de Admissão: <strong id="nomeVaga">Carregando...</strong>
+            </div>
+            <div class="card-body">
+
+                <h5 class="text-info mt-2">Instruções do Recrutador</h5>
+                <div class="p-3 border border-info rounded mb-4" style="background: rgba(23,162,184,0.1)">
+                    <p id="instrucoesGerais" style="white-space: pre-line;">Carregando...</p>
+                </div>
+
+                <h5 class="text-white">Manuais e Guias</h5>
+                <div id="anexosContainer" class="mb-4">
+                    <p class="text-muted small">Carregando anexos...</p>
+                </div>
+
+                <hr class="my-4 border-light">
+
+                <h5 class="text-white mb-3">Documentos Necessários</h5>
+                <div id="documentosContainer">
+                    <p class="text-muted text-center">Buscando documentos...</p>
+                </div>
+
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="vendor/bootstrap/js/popper.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/logout.js"></script>
+<script src="js/meuOnboarding.js"></script>
+
+</body>
+</html>

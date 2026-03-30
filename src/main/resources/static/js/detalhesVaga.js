@@ -1,111 +1,157 @@
-document.addEventListener('DOMContentLoaded', function() {
-    checkLogin();
-    const urlParams = new URLSearchParams(window.location.search);
-    const vagaId = urlParams.get('id');
+const API_BASE_URL = 'http://localhost:8080/api';
+let vagaId = null;
+let candidatoId = null;
 
-    if (vagaId) {
-        loadVaga(vagaId);
-        checkStatusCandidatura(vagaId);
-    } else {
-        alert('Vaga não encontrada!');
-        window.location.href = 'mainCandidato.html';
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    vagaId = urlParams.get('id');
+    candidatoId = localStorage.getItem('candidatoId');
+
+    if (!vagaId) {
+        alert('ID da vaga não fornecido!');
+        window.history.back();
+        return;
     }
+
+    carregarDetalhesVaga();
 });
 
-function checkLogin() {
-    const candidatoId = localStorage.getItem('candidatoId');
-    if (!candidatoId) {
-        window.location.href = 'signInCandidato.html';
+async function carregarDetalhesVaga() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/vagas/${vagaId}`, {
+            headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+        });
+        if (!response.ok) throw new Error('Falha ao carregar detalhes da vaga.');
+
+        const vaga = await response.json();
+        document.getElementById('tituloVaga').innerText = vaga.nomeVaga;
+
+        if (vaga.recrutador) {
+            document.getElementById('empresaVaga').innerText = vaga.empresa ? vaga.empresa.nome : 'Empresa Confidencial';
+            document.getElementById('empresaVagaLink').href = `perfilPublicoRecrutador.html?id=${vaga.recrutador.id}`;
+        }
+
+        document.getElementById('localVaga').innerText = `${vaga.cidade}, ${vaga.estado}`;
+        document.getElementById('modalidadeVaga').innerText = vaga.modalidade;
+        document.getElementById('salarioVaga').innerText = vaga.salario ? `R$ ${vaga.salario.toFixed(2)}` : 'A combinar';
+        document.getElementById('nivelVaga').innerText = vaga.nivelExperiencia;
+        document.getElementById('setorVaga').innerText = vaga.setorVaga;
+        document.getElementById('dataVaga').innerText = `Publicada em: ${new Date(vaga.dataPostagem).toLocaleDateString('pt-BR')}`;
+        document.getElementById('descricaoVaga').innerText = vaga.descricaoVaga;
+
+        verificarStatusCandidatura();
+        carregarTestesDaVaga(vaga.testes);
+
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro ao carregar detalhes da vaga.');
     }
 }
 
-function loadVaga(id) {
-    fetch(`http://localhost:8080/api/vagas/${id}`)
-        .then(response => {
-            if (!response.ok) throw new Error('Erro ao carregar vaga');
-            return response.json();
-        })
-        .then(vaga => {
-            document.getElementById('tituloVaga').textContent = vaga.nomeVaga;
-            document.getElementById('empresaVaga').textContent = vaga.empresa ? vaga.empresa.nome : 'Empresa Confidencial';
-            document.getElementById('localVaga').textContent = `${vaga.cidade} - ${vaga.estado}`;
-            document.getElementById('modalidadeVaga').textContent = vaga.modalidade;
-            document.getElementById('nivelVaga').textContent = vaga.nivelExperiencia;
-            document.getElementById('salarioVaga').textContent = vaga.salario;
-            document.getElementById('setorVaga').textContent = vaga.setorVaga;
-            document.getElementById('dataVaga').textContent = new Date(vaga.dataPostagem).toLocaleDateString();
-            document.getElementById('descricaoVaga').textContent = vaga.descricaoVaga;
-        })
-        .catch(error => {
-            console.error('Erro:', error);
-            alert('Erro ao carregar detalhes da vaga.');
+async function verificarStatusCandidatura() {
+    if (!candidatoId) {
+        document.getElementById('divBotaoCandidatar').innerHTML = '<button class="btn btn-primary btn-lg" onclick="candidatarSe()">Candidatar-se a esta Vaga</button>';
+        return;
+    }
+    try {
+        const response = await fetch(`${API_BASE_URL}/candidaturas/candidato/${candidatoId}/vagas`, {
+            headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
         });
+        if (!response.ok) return;
+
+        const vagasInscritasIds = await response.json();
+        if (vagasInscritasIds.includes(parseInt(vagaId))) {
+            document.getElementById('divBotaoCandidatar').innerHTML = '<p class="text-success">Você já se candidatou a esta vaga.</p>';
+            document.getElementById('secaoTestes').style.display = 'block';
+        } else {
+            document.getElementById('divBotaoCandidatar').innerHTML = '<button class="btn btn-primary btn-lg" onclick="candidatarSe()">Candidatar-se a esta Vaga</button>';
+        }
+    } catch (e) {
+        console.error("Erro ao verificar candidatura:", e);
+    }
 }
 
-function checkStatusCandidatura(vagaId) {
-    const candidatoId = localStorage.getItem('candidatoId');
-    if (!candidatoId) return;
+async function carregarTestesDaVaga(testes) {
+    const listaTestes = document.getElementById('listaTestes');
+    if (!testes || testes.length === 0) {
+        listaTestes.innerHTML = '<p class="text-muted">Nenhum teste associado a esta vaga.</p>';
+        return;
+    }
 
-    fetch(`http://localhost:8080/api/candidaturas/candidato/${candidatoId}/vagas`)
-        .then(response => response.json())
-        .then(vagasIds => {
-            // Verifica se o ID da vaga atual está na lista de vagas inscritas
-            if (vagasIds.includes(parseInt(vagaId))) {
-                const btn = document.querySelector('button[onclick="candidatarSe()"]');
-                if (btn) {
-                    btn.textContent = "Candidatura Realizada";
-                    btn.className = "btn btn-secondary btn-lg";
-                    btn.disabled = true;
-                    btn.removeAttribute('onclick');
+    listaTestes.innerHTML = '';
+    for (const teste of testes) {
+        let statusBotao = `<button class="btn btn-info" onclick="realizarTeste(${teste.id})">Realizar Teste</button>`;
+
+        if (candidatoId) {
+            try {
+                const statusResponse = await fetch(`${API_BASE_URL}/testes/${teste.id}/candidato/${candidatoId}/status`, {
+                    headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+                });
+                if (statusResponse.ok) {
+                    const statusData = await statusResponse.json();
+                    if (statusData.concluido) {
+                        statusBotao = `<button class="btn btn-success" disabled>Teste Concluído</button>`;
+                    }
                 }
+            } catch (e) {
+                console.error(`Erro ao verificar status do teste ${teste.id}:`, e);
             }
-        })
-        .catch(error => console.error('Erro ao verificar status da candidatura:', error));
+        }
+
+        const div = document.createElement('div');
+        div.className = 'd-flex justify-content-between align-items-center border-bottom border-light py-2';
+        div.innerHTML = `
+            <div>
+                <h6 class="mb-0 text-white">${teste.titulo}</h6>
+                <small class="text-white-50">${teste.descricao}</small>
+            </div>
+            <div>
+                ${statusBotao}
+            </div>
+        `;
+        listaTestes.appendChild(div);
+    }
 }
 
-function candidatarSe() {
-    const candidatoId = localStorage.getItem('candidatoId');
-    const urlParams = new URLSearchParams(window.location.search);
-    const vagaId = urlParams.get('id');
+async function candidatarSe() {
+    if (!candidatoId) {
+        alert('Você precisa estar logado como candidato para se inscrever.');
+        window.location.href = 'signInCandidato.html';
+        return;
+    }
 
-    const inscricaoDTO = {
-        idCandidato: parseInt(candidatoId),
-        idVaga: parseInt(vagaId)
-    };
+    const btn = document.querySelector('#divBotaoCandidatar button');
+    btn.disabled = true;
+    btn.innerText = 'Inscrevendo...';
 
-    fetch('http://localhost:8080/api/candidaturas', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(inscricaoDTO)
-    })
-    .then(async response => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/candidaturas`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('token') },
+            body: JSON.stringify({ idCandidato: candidatoId, idVaga: vagaId })
+        });
+
         if (response.ok) {
             alert('Candidatura realizada com sucesso!');
-            // Atualiza o botão visualmente
-            const btn = document.querySelector('button[onclick="candidatarSe()"]');
-            if (btn) {
-                btn.textContent = "Candidatura Realizada";
-                btn.className = "btn btn-secondary btn-lg";
-                btn.disabled = true;
-                btn.removeAttribute('onclick');
-            }
+            verificarStatusCandidatura();
         } else {
-            const error = await response.json();
-            alert(error.message || 'Erro ao realizar candidatura. Você já pode estar inscrito.');
+            const err = await response.json();
+            alert('Erro: ' + (err.message || 'Não foi possível se candidatar.'));
+            btn.disabled = false;
+            btn.innerText = 'Candidatar-se a esta Vaga';
         }
-    })
-    .catch(error => {
+    } catch (error) {
         console.error('Erro:', error);
-        alert('Erro ao conectar com o servidor.');
-    });
+        alert('Erro de conexão ao se candidatar.');
+        btn.disabled = false;
+        btn.innerText = 'Candidatar-se a esta Vaga';
+    }
+}
+
+function realizarTeste(testeId) {
+    window.location.href = `realizarTeste.html?testeId=${testeId}`;
 }
 
 function voltar() {
-    if (document.referrer.includes('minhasCandidaturas.html')) {
-        window.location.href = 'minhasCandidaturas.html';
-    } else {
-        window.location.href = 'mainCandidato.html';
-    }
+    window.history.back();
 }

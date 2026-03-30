@@ -1,6 +1,9 @@
+const API_BASE_URL = 'http://localhost:8080/api';
+
 document.addEventListener('DOMContentLoaded', function() {
     checkLogin();
     loadPerfil();
+    carregarCurriculos();
 
     // Máscaras
     $('#cpf').mask('000.000.000-00');
@@ -12,10 +15,16 @@ document.addEventListener('DOMContentLoaded', function() {
         buscarCep(this.value);
     });
 
-    // Envio do formulário
+    // Envio do formulário de perfil
     document.getElementById('perfilForm').addEventListener('submit', function(e) {
         e.preventDefault();
         atualizarPerfil();
+    });
+
+    // Upload de Currículo
+    document.getElementById('uploadCurriculoForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        fazerUploadCurriculo();
     });
 });
 
@@ -30,7 +39,7 @@ function loadPerfil() {
     const candidatoId = localStorage.getItem('candidatoId');
     if (!candidatoId) return;
 
-    fetch(`http://localhost:8080/api/candidatos/${candidatoId}`)
+    fetch(`${API_BASE_URL}/candidatos/${candidatoId}`)
         .then(response => {
             if (!response.ok) throw new Error('Erro ao carregar perfil');
             return response.json();
@@ -110,7 +119,7 @@ function atualizarPerfil() {
         senha: senha
     };
 
-    fetch(`http://localhost:8080/api/candidatos/${candidatoId}`, {
+    fetch(`${API_BASE_URL}/candidatos/${candidatoId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -138,4 +147,106 @@ function atualizarPerfil() {
         }
     })
     .catch(error => console.error('Erro:', error));
+}
+
+async function carregarCurriculos() {
+    const candidatoId = localStorage.getItem('candidatoId');
+    if (!candidatoId) return;
+
+    const container = document.getElementById('listaCurriculos');
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/curriculos/candidato/${candidatoId}`, {
+            headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+        });
+
+        if (!response.ok) throw new Error('Falha ao buscar currículos.');
+
+        const curriculos = await response.json();
+        container.innerHTML = '';
+
+        if (curriculos.length === 0) {
+            container.innerHTML = '<p class="text-white-50 small mb-0">Você ainda não enviou nenhum currículo.</p>';
+            return;
+        }
+
+        curriculos.forEach(curriculo => {
+            const div = document.createElement('div');
+            div.className = 'd-flex justify-content-between align-items-center mb-2 p-2 border border-light rounded';
+            div.innerHTML = `
+                <div>
+                    <i class="zmdi zmdi-file-text text-info mr-2"></i>
+                    <span class="text-white">${curriculo.nomeCurriculo}</span>
+                </div>
+                <div>
+                    <a href="${API_BASE_URL}/files/${curriculo.urlCurriculo}" target="_blank" class="btn btn-sm btn-outline-light mr-1" title="Ver Currículo"><i class="zmdi zmdi-eye"></i></a>
+                    <button class="btn btn-sm btn-outline-danger" onclick="apagarCurriculo(${curriculo.id})" title="Apagar Currículo"><i class="zmdi zmdi-delete"></i></button>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+
+    } catch (error) {
+        console.error(error);
+        container.innerHTML = '<p class="text-danger small">Erro ao carregar currículos.</p>';
+    }
+}
+
+async function fazerUploadCurriculo() {
+    const candidatoId = localStorage.getItem('candidatoId');
+    const fileInput = document.getElementById('arquivoCurriculo');
+    const btn = document.querySelector('#uploadCurriculoForm button');
+
+    if (fileInput.files.length === 0) {
+        alert("Por favor, selecione um arquivo.");
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = 'Enviando...';
+
+    const formData = new FormData();
+    formData.append('arquivo', fileInput.files[0]);
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/curriculos/upload/${candidatoId}`, {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') },
+            body: formData
+        });
+
+        if (response.ok) {
+            alert('Currículo enviado com sucesso!');
+            fileInput.value = ''; // Limpa o input
+            carregarCurriculos(); // Atualiza a lista
+        } else {
+            alert('Erro ao enviar currículo. Tente novamente.');
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Erro de conexão ao enviar o currículo.');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="zmdi zmdi-upload"></i> Enviar Currículo';
+    }
+}
+
+async function apagarCurriculo(id) {
+    if (!confirm("Tem certeza que deseja apagar este currículo?")) return;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/curriculos/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+        });
+
+        if (response.ok) {
+            carregarCurriculos();
+        } else {
+            alert("Erro ao apagar currículo.");
+        }
+    } catch (error) {
+        console.error(error);
+        alert("Erro de conexão ao apagar currículo.");
+    }
 }

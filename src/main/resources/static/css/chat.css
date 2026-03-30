@@ -1,0 +1,228 @@
+/* Estrutura Principal */
+.main-container {
+    display: flex;
+    height: calc(100vh - 100px);
+    background: #212529; /* Cor de fundo do card do tema escuro */
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Sidebar (Lista de Contatos) */
+.sidebar {
+    width: 350px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    background: #2a2f34; /* Um pouco mais claro que o fundo */
+}
+
+.sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-search {
+    padding: 15px;
+    background: #32373d;
+}
+
+.sidebar-search .form-control {
+    background-color: #2a2f34;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+.sidebar-search .form-control::placeholder {
+    color: #a0a0a0;
+}
+
+.sidebar-content {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.contact-list li {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background-color 0.2s;
+    position: relative; /* Para o posicionamento do badge */
+}
+
+.contact-list li:hover {
+    background-color: #32373d;
+}
+
+.contact-list li.active {
+    background-color: #007bff; /* Cor de destaque do Bootstrap */
+}
+
+.avatar-placeholder {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-right: 15px;
+}
+
+.contact-details {
+    flex-grow: 1;
+}
+
+.contact-name {
+    font-weight: 500;
+    margin-bottom: 2px;
+    color: #fff;
+}
+
+.contact-status, .contact-last-message {
+    font-size: 0.85rem;
+    color: #a0a0a0;
+}
+
+.unread-badge {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    background-color: #dc3545;
+    color: white;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+/* Área Principal do Chat */
+.chat-area {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: #2a2f34;
+}
+
+/* NOVO: Estilização do link de perfil no cabeçalho */
+.chat-header .contact-name a {
+    text-decoration: none !important; /* Remove o sublinhado */
+    color: inherit; /* Herda a cor do elemento pai */
+    transition: color 0.2s;
+}
+
+.chat-header .contact-name a:hover {
+    color: #14b6ff !important; /* Muda de cor ao passar o mouse para indicar interatividade */
+}
+
+.chat-body {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-start {
+    margin: auto;
+    text-align: center;
+    color: #a0a0a0;
+}
+.chat-start .zmdi {
+    font-size: 4rem;
+}
+
+.chat-message {
+    display: flex;
+    margin-bottom: 15px;
+    max-width: 70%;
+}
+
+.chat-message .message-content {
+    padding: 10px 15px;
+    border-radius: 18px;
+    color: #fff;
+}
+
+/* Mensagem Recebida */
+.message-left {
+    align-self: flex-start;
+}
+.message-left .message-content {
+    background-color: #32373d;
+    border-top-left-radius: 0;
+}
+
+/* Mensagem Enviada */
+.message-right {
+    align-self: flex-end;
+}
+.message-right .message-content {
+    background-color: #007bff;
+    border-top-right-radius: 0;
+}
+
+.message-time {
+    font-size: 0.75rem;
+    color: #a0a0a0;
+    margin-top: 5px;
+}
+.message-right .message-time {
+    text-align: right;
+}
+
+.chat-footer {
+    padding: 15px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: #2a2f34;
+}
+
+.chat-footer .form-control {
+    background-color: #32373d;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+.chat-footer .form-control:focus {
+    box-shadow: none;
+    border-color: #007bff;
+}
+
+/* Responsividade */
+@media (max-width: 767.98px) {
+    .sidebar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+        transition: transform 0.3s ease;
+    }
+    .sidebar.d-none {
+        transform: translateX(-100%);
+    }
+    .chat-area {
+        width: 100%;
+    }
+}

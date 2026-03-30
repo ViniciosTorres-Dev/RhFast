@@ -1,3 +1,5 @@
+const API_BASE_URL = 'http://localhost:8080/api';
+
 const nomeInput = document.querySelector('input[name="nome"]');
 const sobrenomeInput = document.querySelector('input[name="sobrenome"]');
 const cpfInput = document.querySelector('input[name="cpf"]');
@@ -116,7 +118,7 @@ function cadastrarRecrutador() {
     }
   };
 
-  fetch('http://localhost:8080/api/recrutadores', {
+  fetch(`${API_BASE_URL}/recrutadores`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

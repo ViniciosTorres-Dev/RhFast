@@ -1,3 +1,5 @@
+const API_BASE_URL = 'http://localhost:8080/api';
+
 document.addEventListener('DOMContentLoaded', function() {
     checkLogin();
     loadPerfil();
@@ -24,7 +26,7 @@ function loadPerfil() {
     const recrutadorId = localStorage.getItem('recrutadorId');
     if (!recrutadorId) return;
 
-    fetch(`http://localhost:8080/api/recrutadores/${recrutadorId}`)
+    fetch(`${API_BASE_URL}/recrutadores/${recrutadorId}`)
         .then(response => {
             if (!response.ok) throw new Error('Erro ao carregar perfil');
             return response.json();
@@ -76,7 +78,7 @@ function atualizarPerfil() {
         senha: senha
     };
 
-    fetch(`http://localhost:8080/api/recrutadores/${recrutadorId}`, {
+    fetch(`${API_BASE_URL}/recrutadores/${recrutadorId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
